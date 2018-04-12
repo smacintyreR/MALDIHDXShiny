@@ -56,12 +56,15 @@ ui <- fluidPage(
                                         ) 
                                  ),
                                  
-                                 column(4,
+                                 column(4,br(),
                                         
-                                        h4("Centroid Parameters"),
+                                        h4("Centroid Parameters"), hr(),
                                         
                                         sliderInput('SNR','Signal to Noise',min=1,max=10,
-                                                    value = 5, step =0.1)
+                                                    value = 5, step =0.1),br(),
+                                        
+                                        sliderInput('BPI','% Base Peak Intensity',min=0.1,max=100,
+                                                    value = 50, step =1)
                                  )
                              )
                     ),
