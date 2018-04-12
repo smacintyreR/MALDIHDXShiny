@@ -6,95 +6,103 @@ library(DT)
 peptide.identifications <- import.identifications()
 TP <- unique(pep10[,2])
 
-Pep10Spectra <- DFtoSpec(pep10)
 
 
-# Define UI for random distribution app ----
+
+# Define UI
 ui <- fluidPage(
-
-  # App title ----
-  titlePanel("MALDIHDX"),
-
-  # Sidebar layout with input and output definitions ----
-
-
+    
+    # App title
+    titlePanel("MALDIHDX"),
+    
     # Main panel for displaying outputs ----
     mainPanel(
-
-      # Output: Tabset w/ plot, summary, and table ----
-      tabsetPanel(type = "tabs",
-                  tabPanel("Identifications",dataTableOutput("table")),
-                  tabPanel("Centroid Plots",
-                        
-                        
-                               sidebarPanel(
-                                   helpText("Investigate centroid plots for bound/unbound peptides"),
-                                   
-                                   selectInput("var", 
-                                               label = "Select your peptide",
-                                               choices = c("Peptide 1", "Peptide 2",
-                                                           "Peptide 3", "Peptide 4"),
-                                               selected = "Peptide 1"),
-                                   
-                                   selectInput("varRep", 
-                                               label = "Select Replicate",
-                                               choices = c("1","2","3"),
-                                               selected = "1"),
-                                   
-                                   selectInput("varTime", 
-                                               label = "Select your timepoint",
-                                               choices = TP,
-                                               selected = TP[1]),
-                                   
-                                   selectInput("varBound", 
-                                               label = "Select State",
-                                               choices = c("Bound", "Unbound"),
-                                               selected = "Unbound")
-                               ),
-                           
-                           mainPanel(
-                               
-                               textOutput("text"),
-                               
-                               plotOutput("plot")
-                           )
-                               
-                               
+        
+        # Output: Tabset
+        tabsetPanel(type = "tabs",
+                    
+                    tabPanel("Identifications",
                              
-                           
-                           
-                           
-                           
-                           
-                           
-                           
-                           ),
-                  tabPanel("Uptake Plots",dataTableOutput("table2"))
-      
-                  )
-    )
-  
+                             dataTableOutput("table")),
+                    
+                    tabPanel("Centroid Plots",
+                             
+                             fluidRow(
+                                 
+                                 column(8,
+                                        
+                                        plotOutput("plot"),
+                                        hr(),
+                                        
+                                        fluidRow(column(6,
+                                                        
+                                                        selectInput("var", label = "Select your peptide",
+                                                                    choices = peptide.identifications[,3],
+                                                                    selected = peptide.identifications[1,3]),
+                                                        
+                                                        selectInput("varRep", label = "Select Replicate",
+                                                                    choices = c("1","2","3"),
+                                                                    selected = "1")),
+                                                 
+                                                 column(6,
+                                                        
+                                                        selectInput("varTime", label = "Select timepoint",
+                                                                    choices = TP,
+                                                                    selected = TP[1]),
+                                                        
+                                                        selectInput("varBound", label = "Select State",
+                                                                    choices = c("Bound", "Unbound"),
+                                                                    selected = "Unbound"))
+                                        ) 
+                                 ),
+                                 
+                                 column(4,
+                                        
+                                        h4("Centroid Parameters"),
+                                        
+                                        sliderInput('SNR','Signal to Noise',min=1,max=10,
+                                                    value = 5, step =0.1)
+                                 )
+                             )
+                    ),
+                    
+                    
+                    tabPanel("Uptake Plots",
+                             
+                             dataTableOutput("table2"))
+                    
+        )
+    ) 
 )
-  
 
 
-# Define server logic for random distribution app ----
+
+# Define server logic
 server <- function(input, output) {
     
-
-
+    
+    heading <- reactive({
+        paste(input$var,"Timepoint",input$varTime,"\n Replicate",
+              input$varRep,"-",input$varBound)
+    })
+    
+    
+    
     
     CurSpec <- reactive({
         
-   
+        PepNo <- match(input$var,peptide.identifications[,3])
+        
+        PepSpectra <- L[[PepNo]]
         
         state <- switch(input$varBound,"Unbound" = "A","Bound" = "B")
         
         stateRep <- paste(state,input$varRep,sep="")
         
-        cond <- lapply(Pep10Spectra,function(x) metaData(x)$StateRep == stateRep & metaData(x)$time == input$varTime )
+        cond <- lapply(PepSpectra,function(x)
+            metaData(x)$StateRep == stateRep & metaData(x)$time == input$varTime )
         
-        CurSpec <- Pep10Spectra[unlist(cond)]
+        CurSpec <- PepSpectra[unlist(cond)]
         
         return(CurSpec)
         
@@ -103,26 +111,15 @@ server <- function(input, output) {
     
     
     output$table <- renderDataTable({
-       peptide.identifications
-    },rownames=T)
+        peptide.identifications},rownames=T)
+    
     
     output$plot <- renderPlot({
+        
+        plot(CurSpec()[[1]], main = heading())
+        
+    },height = 400, width = 400)
     
-     
-        plot(CurSpec()[[1]])
- 
-   
-    },height = 600, width = 600)
-    
-    
-    output$table2 <- renderDataTable({
-       
-    },rownames=F)
-    
-    output$text <- renderText({ 
-        paste(input$var,"Timepoint",input$varTime,"Replicate",input$varRep,"-",input$varBound)
-    })
-
 }
 
 # Create Shiny app ----
