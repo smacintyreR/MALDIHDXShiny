@@ -1,16 +1,19 @@
 library(shiny)
 library(MALDIHDX)
 library(DT)
+library(shinyjs)
 
 
 peptide.identifications <- import.identifications()
 TP <- unique(pep10[,2])
 
-
+defSNR = 5
 
 
 # Define UI
 ui <- fluidPage(
+    
+    useShinyjs(),
     
     # App title
     titlePanel("MALDIHDX"),
@@ -61,10 +64,12 @@ ui <- fluidPage(
                                         h4("Centroid Parameters"), hr(),
                                         
                                         sliderInput('SNR','Signal to Noise',min=1,max=10,
-                                                    value = 5, step =0.1),br(),
+                                                    value = 5, step =0.1),
+                                        actionButton("resSNR","Reset to default"),br(),br(),
                                         
                                         sliderInput('BPI','% Base Peak Intensity',min=0.1,max=100,
-                                                    value = 50, step =1)
+                                                    value = 50, step =1),
+                                        actionButton("resBPI","Reset to default")
                                  )
                              )
                     ),
@@ -88,6 +93,14 @@ server <- function(input, output) {
         paste(input$var,"Timepoint",input$varTime,"\n Replicate",
               input$varRep,"-",input$varBound)
     })
+    
+  
+    observeEvent(input$resSNR, {
+        
+        reset("SNR")
+            
+    })
+
     
     
     
