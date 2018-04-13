@@ -100,6 +100,12 @@ server <- function(input, output) {
         reset("SNR")
             
     })
+    
+    observeEvent(input$resBPI, {
+        
+        reset("BPI")
+        
+    })
 
     
     
