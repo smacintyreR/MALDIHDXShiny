@@ -51,7 +51,7 @@ ui <- fluidPage(
                                                         
                                                         selectInput("varTime", label = "Select timepoint",
                                                                     choices = TP,
-                                                                    selected = TP[1]), br(),
+                                                                    selected = TP[1]),
                                                         
                                                         selectInput("varBound", label = "Select State",
                                                                     choices = c("Bound", "Unbound"),
