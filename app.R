@@ -136,6 +136,21 @@ server <- function(input, output) {
         peakPick(CurSpec()[[1]],SNR=input$SNR)
     })
     
+    Interp <- reactive({
+        if(length(peaks()) > 1){
+            linearInterp(peaks())
+        }
+    })
+    
+    Width <- reactive({
+        if(length(peaks()) > 1){
+        widthFinder(peaks(),CurSpec()[[1]],(input$BPI)/100)
+        }
+    })
+    
+    Centroid <- reactive({
+        centroidCalc(Width(),CurSpec[[1]])
+    })
   
     
     
@@ -148,6 +163,10 @@ server <- function(input, output) {
         
         plot(CurSpec()[[1]], main = heading())
         points(peaks(),col="red",pch=4)
+        plotLin(Interp(),peaks())
+        if(length(Width()>1)){
+        plotWidth(Width())
+        }
         
     },height = 400, width = 400)
     
