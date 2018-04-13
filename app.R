@@ -39,7 +39,7 @@ ui <- fluidPage(
                                         
                                         fluidRow(column(6,
                                                         
-                                                        selectInput("var", label = "Select your peptide",
+                                                        selectInput("var", label = "Select peptide",
                                                                     choices = peptide.identifications[,3],
                                                                     selected = peptide.identifications[1,3]),
                                                         
@@ -51,11 +51,13 @@ ui <- fluidPage(
                                                         
                                                         selectInput("varTime", label = "Select timepoint",
                                                                     choices = TP,
-                                                                    selected = TP[1]),
+                                                                    selected = TP[1]), br(),
                                                         
                                                         selectInput("varBound", label = "Select State",
                                                                     choices = c("Bound", "Unbound"),
                                                                     selected = "Unbound"))
+                                                 
+                                                 
                                         ) 
                                  ),
                                  
@@ -69,7 +71,13 @@ ui <- fluidPage(
                                         
                                         sliderInput('BPI','% Base Peak Intensity',min=0.1,max=100,
                                                     value = 50, step =1),
-                                        actionButton("resBPI","Reset to default")
+                                        actionButton("resBPI","Reset to default"),br(),br(),hr(),br(),
+                                        
+                                        fluidRow(column(12,
+                                                        
+                                                        tableOutput("tableCent")  
+                                                        
+                                                        ))
                                  )
                              )
                     ),
@@ -151,12 +159,20 @@ server <- function(input, output) {
     Centroid <- reactive({
         centroidCalc(Width(),CurSpec()[[1]])
     })
+    
+    CentTable <- reactive({
+        data.frame(cbind(Centroid = Centroid(),Width = (Width()[2]-Width()[1])))
+    })
   
     
     
     
     output$table <- renderDataTable({
         peptide.identifications},rownames=T)
+    
+    output$tableCent <- renderTable({
+        CentTable()
+                   },bordered = T)
     
     
     output$plot <- renderPlot({
