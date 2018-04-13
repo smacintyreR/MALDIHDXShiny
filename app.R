@@ -64,7 +64,7 @@ ui <- fluidPage(
                                         h4("Centroid Parameters"), hr(),
                                         
                                         sliderInput('SNR','Signal to Noise',min=1,max=10,
-                                                    value = 5, step =0.1),
+                                                    value = 3, step =0.1),
                                         actionButton("resSNR","Reset to default"),br(),br(),
                                         
                                         sliderInput('BPI','% Base Peak Intensity',min=0.1,max=100,
@@ -87,6 +87,8 @@ ui <- fluidPage(
 
 # Define server logic
 server <- function(input, output) {
+    
+  
     
     
     heading <- reactive({
@@ -130,6 +132,12 @@ server <- function(input, output) {
         
     })
     
+    peaks <- reactive({
+        peakPick(CurSpec()[[1]],SNR=input$SNR)
+    })
+    
+  
+    
     
     
     output$table <- renderDataTable({
@@ -139,6 +147,7 @@ server <- function(input, output) {
     output$plot <- renderPlot({
         
         plot(CurSpec()[[1]], main = heading())
+        points(peaks(),col="red",pch=4)
         
     },height = 400, width = 400)
     
