@@ -149,7 +149,7 @@ server <- function(input, output) {
     })
     
     Centroid <- reactive({
-        centroidCalc(Width(),CurSpec[[1]])
+        centroidCalc(Width(),CurSpec()[[1]])
     })
   
     
@@ -167,6 +167,7 @@ server <- function(input, output) {
         if(length(Width()>1)){
         plotWidth(Width())
         }
+        centroidPlot(Centroid(),CurSpec()[[1]])
         
     },height = 400, width = 400)
     
