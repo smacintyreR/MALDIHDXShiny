@@ -3,6 +3,8 @@ library(MALDIHDX)
 library(DT)
 library(shinyjs)
 
+options(shiny.maxRequestSize = 30*1024^2)
+
 
 peptide.identifications <- import.identifications()
 TP <- unique(pep10[,2])
@@ -24,7 +26,21 @@ ui <- fluidPage(
         # Output: Tabset
         tabsetPanel(type = "tabs",
                     
-                    tabPanel("Data Import"),
+                    tabPanel("Data Import",
+                             
+                           sidebarLayout(
+                               
+                             sidebarPanel(
+                                 
+                                 
+                                 fileInput("file1", "Choose folder",
+                                           multiple = TRUE, buttonLabel = "Browse...",placeholder = "No file selected"
+                                       )
+                                 ),
+                             
+                             mainPanel()
+                             )  
+                           ),  
                     
                     tabPanel("Identifications",
                              
