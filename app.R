@@ -24,6 +24,8 @@ ui <- fluidPage(
         # Output: Tabset
         tabsetPanel(type = "tabs",
                     
+                    tabPanel("Data Import"),
+                    
                     tabPanel("Identifications",
                              
                              dataTableOutput("table")),
@@ -85,7 +87,10 @@ ui <- fluidPage(
                     
                     tabPanel("Uptake Plots",
                              
-                             dataTableOutput("table2"))
+                             dataTableOutput("table2")),
+                    
+                    
+                    tabPanel("Output table")
                     
         )
     ) 
