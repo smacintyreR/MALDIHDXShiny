@@ -32,6 +32,9 @@ ui <- fluidPage(
                                
                              sidebarPanel(
                                  
+                                 helpText("Please upload a Zip file containing
+                                          Scaffold file and Mass Spectra"),
+                                 
                                  
                                  fileInput("file1", "Choose folder",
                                            multiple = TRUE, buttonLabel = "Browse...",placeholder = "No file selected"
@@ -106,7 +109,9 @@ ui <- fluidPage(
                              dataTableOutput("table2")),
                     
                     
-                    tabPanel("Output table")
+                    tabPanel("Output table",
+                             
+                             dataTableOutput("MEMHDXTable"))
                     
         )
     ) 
@@ -117,7 +122,7 @@ ui <- fluidPage(
 # Define server logic
 server <- function(input, output) {
     
-  
+
     
     
     heading <- reactive({
