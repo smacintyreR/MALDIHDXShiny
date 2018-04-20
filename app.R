@@ -7,10 +7,13 @@ options(shiny.maxRequestSize = 30*1024^2)
 
 
 peptide.identifications <- import.identifications()
+
 TP <- unique(pep10[,2])
 
 defSNR = 5
 
+DefaultAllCents <- lapply(peptide.features,function(x) mainCentNewMod2(x))
+DefMEMTable <- MEMHDXall2(DefaultAllCents)
 
 # Define UI
 ui <- fluidPage(
@@ -87,7 +90,7 @@ ui <- fluidPage(
                                         h4("Centroid Parameters"), hr(),
                                         
                                         sliderInput('SNR','Signal to Noise',min=1,max=10,
-                                                    value = 3, step =0.1),
+                                                    value = 5, step =0.1),
                                         actionButton("resSNR","Reset to default"),br(),br(),
                                         
                                         sliderInput('BPI','% Base Peak Intensity',min=0.1,max=100,
@@ -96,7 +99,7 @@ ui <- fluidPage(
                                         
                                         fluidRow(column(12,
                                                         
-                                                        tableOutput("tableCent")  
+                                                        tableOutput("tableCent"),actionButton("expCent","Export centroid to output table")  
                                                         
                                                         ))
                                  )
@@ -122,6 +125,16 @@ ui <- fluidPage(
 # Define server logic
 server <- function(input, output) {
     
+    
+    curRow <- reactive({
+        
+        state <- switch(input$varBound,"Unbound" = "UNBOUND","Bound" = "BOUND")
+        index <- which(c(DefMEMTable$Exposure == input$varTime & DefMEMTable$Replicate==input$varRep&DefMEMTable$State == state & DefMEMTable$Sequence==input$var))
+        return(index)
+    })
+    
+    
+   
 
     
     
@@ -143,6 +156,13 @@ server <- function(input, output) {
         
     })
 
+    
+    observeEvent(input$expCent, {
+        
+        
+        
+        
+    })
     
     
     
@@ -199,6 +219,15 @@ server <- function(input, output) {
     output$tableCent <- renderTable({
         CentTable()
                    },bordered = T)
+    
+    output$MEMHDXTable <- renderDataTable({
+        datatable(DefMEMTable)%>%
+        formatStyle(columns=9,backgroundColor = styleEqual(levels=NA,values = 'red'))},rownames=T
+
+)
+
+
+
     
     
     output$plot <- renderPlot({
