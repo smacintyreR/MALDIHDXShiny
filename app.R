@@ -31,22 +31,22 @@ ui <- fluidPage(
                     
                     tabPanel("Data Import",
                              
-                           sidebarLayout(
-                               
-                             sidebarPanel(
+                             sidebarLayout(
                                  
-                                 helpText("Please upload a Zip file containing
+                                 sidebarPanel(
+                                     
+                                     helpText("Please upload a Zip file containing
                                           Scaffold file and Mass Spectra"),
-                                 
-                                 
-                                 fileInput("file1", "Choose folder",
-                                           multiple = TRUE, buttonLabel = "Browse...",placeholder = "No file selected"
-                                       )
+                                     
+                                     
+                                     fileInput("file1", "Choose folder",
+                                               multiple = TRUE, buttonLabel = "Browse...",placeholder = "No file selected"
+                                     )
                                  ),
-                             
-                             mainPanel()
+                                 
+                                 mainPanel()
                              )  
-                           ),  
+                    ),  
                     
                     tabPanel("Identifications",
                              
@@ -101,7 +101,7 @@ ui <- fluidPage(
                                                         
                                                         tableOutput("tableCent"),actionButton("expCent","Export centroid to output table")  
                                                         
-                                                        ))
+                                        ))
                                  )
                              )
                     ),
@@ -134,8 +134,8 @@ server <- function(input, output) {
     })
     
     
-   
-
+    
+    
     
     
     heading <- reactive({
@@ -143,11 +143,11 @@ server <- function(input, output) {
               input$varRep,"-",input$varBound)
     })
     
-  
+    
     observeEvent(input$resSNR, {
         
         reset("SNR")
-            
+        
     })
     
     observeEvent(input$resBPI, {
@@ -155,7 +155,7 @@ server <- function(input, output) {
         reset("BPI")
         
     })
-
+    
     
     observeEvent(input$expCent, {
         
@@ -198,7 +198,7 @@ server <- function(input, output) {
     
     Width <- reactive({
         if(length(peaks()) > 1){
-        widthFinder(peaks(),CurSpec()[[1]],(input$BPI)/100)
+            widthFinder(peaks(),CurSpec()[[1]],(input$BPI)/100)
         }
     })
     
@@ -209,7 +209,7 @@ server <- function(input, output) {
     CentTable <- reactive({
         data.frame(cbind(Centroid = Centroid(),Width = (Width()[2]-Width()[1])))
     })
-  
+    
     
     
     
@@ -218,16 +218,16 @@ server <- function(input, output) {
     
     output$tableCent <- renderTable({
         CentTable()
-                   },bordered = T)
+    },bordered = T)
     
     output$MEMHDXTable <- renderDataTable({
         datatable(DefMEMTable)%>%
-        formatStyle(columns=9,backgroundColor = styleEqual(levels=NA,values = 'red'))},rownames=T
-
-)
-
-
-
+            formatStyle(columns=9,backgroundColor = styleEqual(levels=NA,values = 'red'))},rownames=T
+        
+    )
+    
+    
+    
     
     
     output$plot <- renderPlot({
@@ -236,7 +236,7 @@ server <- function(input, output) {
         points(peaks(),col="red",pch=4)
         plotLin(Interp(),peaks())
         if(length(Width()>1)){
-        plotWidth(Width())
+            plotWidth(Width())
         }
         centroidPlot(Centroid(),CurSpec()[[1]])
         
