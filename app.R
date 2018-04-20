@@ -142,15 +142,19 @@ server <- function(input, output) {
         paste(input$var,"Timepoint",input$varTime,"\n Replicate",
               input$varRep,"-",input$varBound)
     })
+
     
     
-    observeEvent(input$resSNR, {
+    observeEvent(c(input$var,input$varRep,input$resSNR,input$varBound,input$varTime), {
         
         reset("SNR")
         
     })
     
-    observeEvent(input$resBPI, {
+    
+    
+    
+    observeEvent(c(input$var,input$varRep,input$resSNR,input$varBound,input$varTime), {
         
         reset("BPI")
         
