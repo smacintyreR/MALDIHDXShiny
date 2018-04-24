@@ -182,7 +182,7 @@ server <- function(input, output) {
         stateRep <- paste(state,input$varRep,sep="")
         
         cond <- lapply(PepSpectra,function(x)
-            metaData(x)$StateRep == stateRep & metaData(x)$time == input$varTime )
+            metaData(x)$StateRep == stateRep & metaData(x)$time == input$varTime)
         
         CurSpec <- PepSpectra[unlist(cond)]
         
