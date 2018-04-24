@@ -160,14 +160,14 @@ server <- function(input, output) {
         
     })
     
+    observeEvent(input$expCent,{
+        temp <- MEMTable$data
+        temp[curRow(),9] <- Centroid()
+        MEMTable$data <- temp
+    } )
     
-    observeEvent(input$expCent, {
-        
-        
-        
-        
-    })
     
+    MEMTable <- reactiveValues(data = DefMEMTable)
     
     
     
@@ -225,7 +225,7 @@ server <- function(input, output) {
     },bordered = T)
     
     output$MEMHDXTable <- renderDataTable({
-        datatable(DefMEMTable)%>%
+        datatable(MEMTable$data)%>%
             formatStyle(columns=9,backgroundColor = styleEqual(levels=NA,values = 'red'))},rownames=T
         
     )
