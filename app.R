@@ -93,7 +93,7 @@ ui <- fluidPage(
                                                     value = 5, step =0.1),
                                         actionButton("resSNR","Reset to default"),br(),br(),
                                         
-                                        sliderInput('BPI','% Base Peak Intensity',min=0.1,max=100,
+                                        sliderInput('BPI','% Base Peak Intensity',min=0.1,max=95,
                                                     value = 50, step =1),
                                         actionButton("resBPI","Reset to default"),br(),br(),hr(),br(),
                                         
