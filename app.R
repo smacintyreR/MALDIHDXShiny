@@ -209,6 +209,15 @@ server <- function(input, output) {
         
     })
     
+    CurSpecUptake <- reactive({
+        
+        PepNum <- match(input$varPep,peptide.identifications[,3])
+        
+        CurSpecUptake <- DefaultAllCents[[PepNum]]
+        
+        return(CurSpecUptake)
+    })
+    
     
     
     peaks <- reactive({
@@ -250,6 +259,7 @@ server <- function(input, output) {
             formatStyle(columns=9,backgroundColor = styleEqual(levels=NA,values = 'red'))},rownames=T
         
     )
+    
     
     
     
