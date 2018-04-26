@@ -109,7 +109,23 @@ ui <- fluidPage(
                     
                     tabPanel("Uptake Plots",
                              
-                             dataTableOutput("table2")),
+                             sidebarLayout(
+                                 
+                                 sidebarPanel(
+                                     
+                                     helpText("Select peptide to view Deuterium uptake plots"),
+                                     
+                                     selectInput("varPep", label = "Select peptide",
+                                                 choices = peptide.identifications[,3],
+                                                 selected = peptide.identifications[1,3])
+                                   
+                                     ),
+                                 
+                                 mainPanel(plotOutput("plotUptake"))
+                             ) 
+                             
+            
+                             ),
                     
                     
                     tabPanel("Output table",
@@ -193,6 +209,8 @@ server <- function(input, output) {
         
     })
     
+    
+    
     peaks <- reactive({
         peakPick(CurSpec()[[1]],SNR=input$SNR)
     })
@@ -248,6 +266,13 @@ server <- function(input, output) {
         centroidPlot(Centroid(),CurSpec()[[1]])
         
     },height = 400, width = 400)
+    
+    
+    output$plotUptake <- renderPlot({
+        
+       
+        
+    })
     
 }
 
