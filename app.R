@@ -99,7 +99,7 @@ ui <- fluidPage(
                                         
                                         fluidRow(column(12,
                                                         
-                                                        tableOutput("tableCent"),actionButton("expCent","Export centroid to output table")  
+                                                        tableOutput("tableCent"),actionButton("expCent","Export centroid to output table"),span(textOutput("Done"), style="color:blue")  
                                                         
                                         ))
                                  )
@@ -157,6 +157,7 @@ server <- function(input, output) {
     observeEvent(c(input$var,input$varRep,input$resSNR,input$varBound,input$varTime), {
         
         reset("BPI")
+        output$Done <- renderText("Export manual centroid") 
         
     })
     
@@ -164,6 +165,8 @@ server <- function(input, output) {
         temp <- MEMTable$data
         temp[curRow(),9] <- Centroid()
         MEMTable$data <- temp
+        text <- paste("Row",as.character(curRow()),"Centroid was exported")
+        output$Done <- renderText(text)
     } )
     
     
