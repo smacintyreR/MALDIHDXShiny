@@ -130,7 +130,13 @@ ui <- fluidPage(
                     
                     tabPanel("Output table",
                              
-                             dataTableOutput("MEMHDXTable"))
+                             dataTableOutput("MEMHDXTable"),
+                             
+                             fluidRow(
+                                 p(class = 'text-center', downloadButton('x3', 'Export MEMHDX Table'))
+                             )
+                             
+                             )
                     
         )
     ) 
@@ -149,15 +155,11 @@ server <- function(input, output) {
         return(index)
     })
     
-    
-    
-    
-    
-    
     heading <- reactive({
         paste(input$var,"Timepoint",input$varTime,"\n Replicate",
               input$varRep,"-",input$varBound)
     })
+    
     
     
     
@@ -167,10 +169,7 @@ server <- function(input, output) {
         
     })
     
-    
-    
-    
-    observeEvent(c(input$var,input$varRep,input$resSNR,input$varBound,input$varTime), {
+    observeEvent(c(input$var,input$varRep,input$resBPI,input$varBound,input$varTime), {
         
         reset("BPI")
         output$Done <- renderText("Export manual centroid") 
@@ -183,13 +182,29 @@ server <- function(input, output) {
         MEMTable$data <- temp
         text <- paste("Row",as.character(curRow()),"Centroid was exported")
         output$Done <- renderText(text)
+        
+        
+        PepNumber <- match(input$var,peptide.identifications[,3])
+        stateUp <- switch(input$varBound,"Unbound" = "A","Bound" = "B")
+        stateRepUp <- paste(stateUp,input$varRep,sep="")
+        
+        subNo <- switch(stateRepUp,"A1"=1,"A2"=2,"A3"=3,"B1"=4,"B2"=5,"B3"=6)
+        
+        v <- AllCentReact$data
+        v <- v[[PepNumber]][[subNo]]
+        v[v$'time (min)'==input$varTime,2] <- Centroid()
+        AllCentReact$data[[PepNumber]][[subNo]] <- v
     } )
+    
+    
     
     
     MEMTable <- reactiveValues(data = DefMEMTable)
     
     AllCentReact <- reactiveValues(data = DefaultAllCents)
+  
     
+      
     
     CurSpec <- reactive({
         
@@ -210,16 +225,11 @@ server <- function(input, output) {
         
     })
     
-    CurSpecUptake <- reactive({
+    CurPepUptake <- reactive({
         
-        PepNum <- match(input$varPep,peptide.identifications[,3])
+       match(input$varPep,peptide.identifications[,3])
         
-        CurSpecUptake <- DefaultAllCents[[PepNum]]
-        
-        return(CurSpecUptake)
     })
-    
-    
     
     peaks <- reactive({
         peakPick(CurSpec()[[1]],SNR=input$SNR)
@@ -248,6 +258,12 @@ server <- function(input, output) {
     
     
     
+    
+    
+    
+    
+    
+    
     output$table <- renderDataTable({
         peptide.identifications},rownames=T)
     
@@ -258,13 +274,7 @@ server <- function(input, output) {
     output$MEMHDXTable <- renderDataTable({
         datatable(MEMTable$data)%>%
             formatStyle(columns=9,backgroundColor = styleEqual(levels=NA,values = 'red'))},rownames=T
-        
     )
-    
-    
-    
-    
-    
     
     output$plot <- renderPlot({
         
@@ -281,7 +291,8 @@ server <- function(input, output) {
     
     output$plotUptake <- renderPlot({
         
-       
+        
+       PlotUptakeCompare(CurPepUptake(),all.cents = AllCentReact$data[[CurPepUptake()]],times=TP)
         
     })
     
