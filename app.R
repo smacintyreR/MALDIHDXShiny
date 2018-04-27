@@ -188,6 +188,7 @@ server <- function(input, output) {
     
     MEMTable <- reactiveValues(data = DefMEMTable)
     
+    AllCentReact <- reactiveValues(data = DefaultAllCents)
     
     
     CurSpec <- reactive({
