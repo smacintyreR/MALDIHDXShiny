@@ -143,7 +143,7 @@ ui <- fluidPage(theme=shinytheme("cerulean"),
         )
     ) 
     
-    ),tabPanel("News"))
+    ),tabPanel("Publications"),tabPanel(icon=icon("star"),"News"))
 )
 
 
