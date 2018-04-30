@@ -16,12 +16,14 @@ DefaultAllCents <- lapply(peptide.features,function(x) mainCentNewMod2(x))
 DefMEMTable <- MEMHDXall2(DefaultAllCents)
 
 # Define UI
-ui <- fluidPage(
+ui <- fluidPage(theme=shinytheme("cerulean"),
     
     useShinyjs(),
     
+    navbarPage("MALDIHDX",tabPanel("Analysis",
+    
     # App title
-    titlePanel("MALDIHDX"),
+    titlePanel("Centroid calculation and validation of HDX-MS Experiments"),
     
     # Main panel for displaying outputs ----
     mainPanel(
@@ -140,6 +142,8 @@ ui <- fluidPage(
                     
         )
     ) 
+    
+    ),tabPanel("News"))
 )
 
 
