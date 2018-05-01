@@ -20,7 +20,7 @@ ui <- fluidPage(theme=shinytheme("cerulean"),
     
     useShinyjs(),
     
-    navbarPage("MALDIHDX",tabPanel("Analysis",
+    navbarPage("MALDIHDX",tabPanel("About"),tabPanel("Tutorial"),tabPanel("Analysis",
     
     # App title
     titlePanel("Centroid calculation and validation of HDX-MS Experiments"),
