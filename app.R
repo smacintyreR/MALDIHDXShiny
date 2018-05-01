@@ -132,12 +132,7 @@ ui <- fluidPage(theme=shinytheme("cerulean"),
                     
                     tabPanel("Output table",
                              
-                             dataTableOutput("MEMHDXTable"),
-                             
-                             fluidRow(
-                                 p(class = 'text-center', downloadButton('x3', 'Export MEMHDX Table'))
-                             )
-                             
+                             dataTableOutput("MEMHDXTable")
                              )
                     
                     
@@ -312,11 +307,6 @@ server <- function(input, output) {
         
        PlotUptakeCompare(CurPepUptake(),all.cents = AllCentReact$data[[CurPepUptake()]],times=TP)
         
-    })
-    
-    
-    output$x3 = downloadHandler(paste("MEMHDX",Sys.Date(),".csv",sep=""), content = function(file) {
-        write.csv(MEMTable$data, file)
     })
     
 }
