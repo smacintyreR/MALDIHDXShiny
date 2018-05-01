@@ -138,9 +138,9 @@ ui <- fluidPage(theme=shinytheme("cerulean"),
                                  p(class = 'text-center', downloadButton('x3', 'Export MEMHDX Table'))
                              )
                              
-                             ),
+                             )
                     
-                    tabPanel("test",tableOutput("testTable"))
+                    
                     
         )
     ) 
@@ -280,10 +280,6 @@ server <- function(input, output) {
     output$tableCent <- renderTable({
         CentTable()
     },bordered = T)
-    
-    output$testtable <- renderTable({
-        MEMTable2()
-    })
     
     output$MEMHDXTable <- renderDataTable(server=FALSE,{
         datatable(MEMTable$data, extensions = 'Buttons'
