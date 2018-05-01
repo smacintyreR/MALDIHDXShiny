@@ -138,7 +138,9 @@ ui <- fluidPage(theme=shinytheme("cerulean"),
                                  p(class = 'text-center', downloadButton('x3', 'Export MEMHDX Table'))
                              )
                              
-                             )
+                             ),
+                    
+                    tabPanel("test",tableOutput("testTable"))
                     
         )
     ) 
@@ -204,6 +206,10 @@ server <- function(input, output) {
     
     
     MEMTable <- reactiveValues(data = DefMEMTable)
+    
+    MEMTable2 <- reactive({
+        MEMTable
+    })
     
     AllCentReact <- reactiveValues(data = DefaultAllCents)
   
@@ -275,8 +281,20 @@ server <- function(input, output) {
         CentTable()
     },bordered = T)
     
-    output$MEMHDXTable <- renderDataTable({
-        datatable(MEMTable$data)%>%
+    output$testtable <- renderTable({
+        MEMTable2()
+    })
+    
+    output$MEMHDXTable <- renderDataTable(server=FALSE,{
+        datatable(MEMTable$data, extensions = 'Buttons'
+                  , options = list( 
+                      dom = "Blfrtip"
+                      , buttons = 
+                          list( list(
+                              extend = "collection"
+                              , buttons = c("csv")
+                              , text = "Download"
+                          ))),rownames = FALSE)%>%
             formatStyle(columns=9,backgroundColor = styleEqual(levels=NA,values = 'red'))},rownames=T
     )
     
@@ -298,6 +316,11 @@ server <- function(input, output) {
         
        PlotUptakeCompare(CurPepUptake(),all.cents = AllCentReact$data[[CurPepUptake()]],times=TP)
         
+    })
+    
+    
+    output$x3 = downloadHandler(paste("MEMHDX",Sys.Date(),".csv",sep=""), content = function(file) {
+        write.csv(MEMTable$data, file)
     })
     
 }
