@@ -20,7 +20,26 @@ ui <- fluidPage(theme=shinytheme("cerulean"),
     
     useShinyjs(),
     
-    navbarPage("MALDIHDX",tabPanel("About"),tabPanel("Tutorial"),tabPanel("Analysis",
+    navbarPage("MALDIHDX",tabPanel("About"),
+               
+               
+              tabPanel("Tutorial",
+                       
+                       titlePanel("Tutorial"),
+                       
+                       hr(),
+                       
+                       fluidRow(column(12,img(src = "dodecane.gif", height = 140, width = 400))),hr(),
+                       
+                       fluidRow(column=12,htmlOutput("video"),align="center")
+                       
+                       ),
+                       
+                       
+              
+              
+              
+              tabPanel("Analysis",
     
     # App title
     titlePanel("Centroid calculation and validation of HDX-MS Experiments"),
@@ -307,6 +326,10 @@ server <- function(input, output) {
         
        PlotUptakeCompare(CurPepUptake(),all.cents = AllCentReact$data[[CurPepUptake()]],times=TP)
         
+    })
+    
+    output$video <- renderUI({
+        tags$iframe(width="560", height="315", src="https://www.youtube.com/embed/DOClPhUJWcY",frameborder="0", allow="autoplay; encrypted-media")
     })
     
 }
