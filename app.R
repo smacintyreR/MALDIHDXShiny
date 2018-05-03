@@ -25,11 +25,11 @@ ui <- fluidPage(theme=shinytheme("cerulean"),
                
               tabPanel("Tutorial",
                        
-                       titlePanel("Tutorial"),
+                       fluidRow(column(12,titlePanel("Tutorial"),align="center")),
                        
                        hr(),
                        
-                       fluidRow(column(12,img(src = "dodecane.gif", height = 140, width = 400))),hr(),
+                       fluidRow(column(12,img(src = "dodecane.gif", height = 140, width = 400),align="center")),hr(),
                        
                        fluidRow(column=12,htmlOutput("video"),align="center")
                        
