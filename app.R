@@ -12,6 +12,7 @@ TP <- unique(pep10[,2])
 
 defSNR = 5
 
+L <- lapply(peptide.features,function(x) DFtoSpec(x))
 DefaultAllCents <- lapply(peptide.features,function(x) mainCentNewMod2(x))
 DefMEMTable <- MEMHDXall2(DefaultAllCents)
 
