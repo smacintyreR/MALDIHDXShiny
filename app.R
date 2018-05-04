@@ -5,6 +5,10 @@ library(shinyjs)
 
 options(shiny.maxRequestSize = 30*1024^2)
 
+setwd("data/HDX220318")
+peptide.features <- importNew()
+setwd("..")
+setwd("..")
 
 peptide.identifications <- import.identifications()
 
