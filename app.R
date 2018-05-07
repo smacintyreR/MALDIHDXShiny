@@ -5,10 +5,7 @@ library(shinyjs)
 
 options(shiny.maxRequestSize = 30*1024^2)
 
-setwd("data/HDX220318")
-peptide.features <- importNew()
-setwd("..")
-setwd("..")
+
 
 peptide.identifications <- import.identifications()
 
@@ -65,7 +62,7 @@ ui <- fluidPage(theme=shinytheme("cerulean"),
                                           Scaffold file and Mass Spectra"),
                                      
                                      
-                                     fileInput("file1", "Choose folder",
+                                     fileInput("FileInput", "Choose folder",
                                                multiple = TRUE, buttonLabel = "Browse...",placeholder = "No file selected"
                                      )
                                  ),
@@ -171,6 +168,26 @@ ui <- fluidPage(theme=shinytheme("cerulean"),
 
 # Define server logic
 server <- function(input, output) {
+    
+    
+   observeEvent(input$FileInput,
+                {
+                    
+                    
+                    setwd("data")
+                    file.remove(list.files())
+                    unlink(list.files(),recursive=T)
+                    infile <- input$FileInput
+                    if(is.null(infile))
+                        return(NULL)
+                    unzip(infile$datapath)
+                    setwd("..")
+                }
+                
+                )
+    
+    
+    
     
     
     curRow <- reactive({
