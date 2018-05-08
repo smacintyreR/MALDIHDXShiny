@@ -13,9 +13,9 @@ TP <- unique(pep10[,2])
 
 defSNR = 5
 
-L <- lapply(peptide.features,function(x) DFtoSpec(x))
-DefaultAllCents <- lapply(peptide.features,function(x) mainCentNewMod2(x))
-DefMEMTable <- MEMHDXall2(DefaultAllCents)
+#L <- lapply(peptide.features,function(x) DFtoSpec(x))
+#DefaultAllCents <- lapply(peptide.features,function(x) mainCentNewMod2(x))
+#DefMEMTable <- MEMHDXall2(DefaultAllCents)
 
 # Define UI
 ui <- fluidPage(theme=shinytheme("cerulean"),
@@ -64,7 +64,9 @@ ui <- fluidPage(theme=shinytheme("cerulean"),
                                      
                                      fileInput("FileInput", "Choose folder",
                                                multiple = TRUE, buttonLabel = "Browse...",placeholder = "No file selected"
-                                     )
+                                     ),
+                                     
+                                     actionButton("FileImport","Import all Spectra")
                                  ),
                                  
                                  mainPanel()
@@ -170,6 +172,27 @@ ui <- fluidPage(theme=shinytheme("cerulean"),
 server <- function(input, output) {
     
     
+    
+   observeEvent(input$FileImport,
+                  
+                  {
+                     setwd("data/HDX220318")
+                     peptide.features <<- importNew() 
+                     setwd("..")
+                     setwd("..")
+                   return(peptide.features)   
+                  }
+                  )
+    
+    L <- reactive({
+        
+        lapply(peptide.features,function(x) DFtoSpec(x))
+        
+    })
+    #DefaultAllCents <- lapply(peptide.features,function(x) mainCentNewMod2(x))
+    #DefMEMTable <- MEMHDXall2(DefaultAllCents)
+    
+    
    observeEvent(input$FileInput,
                 {
                     
@@ -247,7 +270,7 @@ server <- function(input, output) {
         MEMTable
     })
     
-    AllCentReact <- reactiveValues(data = DefaultAllCents)
+    #AllCentReact <- reactiveValues(data = DefaultAllCents)
   
     
       
@@ -256,7 +279,7 @@ server <- function(input, output) {
         
         PepNo <- match(input$var,peptide.identifications[,3])
         
-        PepSpectra <- L[[PepNo]]
+        PepSpectra <- L()[[PepNo]]
         
         state <- switch(input$varBound,"Unbound" = "A","Bound" = "B")
         
