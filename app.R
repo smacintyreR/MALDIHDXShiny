@@ -14,7 +14,7 @@ TP <- unique(pep10[,2])
 defSNR = 5
 
 #L <- lapply(peptide.features,function(x) DFtoSpec(x))
-#DefaultAllCents <- lapply(peptide.features,function(x) mainCentNewMod2(x))
+DefaultAllCents <- lapply(isolate(peptide.features$data)  ,function(x) mainCentNewMod2(x))
 #DefMEMTable <- MEMHDXall2(DefaultAllCents)
 
 # Define UI
@@ -172,21 +172,24 @@ ui <- fluidPage(theme=shinytheme("cerulean"),
 server <- function(input, output) {
     
     
+peptide.features <- reactiveValues()
+
+
     
    observeEvent(input$FileImport,
                   
                   {
                      setwd("data/HDX220318")
-                     peptide.features <<- importNew() 
+                     peptide.features$data <- importNew() 
                      setwd("..")
                      setwd("..")
-                   return(peptide.features)   
+                     
                   }
                   )
     
     L <- reactive({
         
-        lapply(peptide.features,function(x) DFtoSpec(x))
+        lapply(peptide.features$data,function(x) DFtoSpec(x))
         
     })
     #DefaultAllCents <- lapply(peptide.features,function(x) mainCentNewMod2(x))
