@@ -172,7 +172,7 @@ ui <- fluidPage(theme=shinytheme("cerulean"),
 server <- function(input, output) {
     
     
-peptide.features <- reactiveValues()
+   peptide.features <- reactiveValues()
 
 
     
@@ -192,6 +192,8 @@ peptide.features <- reactiveValues()
         lapply(peptide.features$data,function(x) DFtoSpec(x))
         
     })
+    
+    
     #DefaultAllCents <- lapply(peptide.features,function(x) mainCentNewMod2(x))
     #DefMEMTable <- MEMHDXall2(DefaultAllCents)
     
@@ -208,8 +210,7 @@ peptide.features <- reactiveValues()
                         return(NULL)
                     unzip(infile$datapath)
                     setwd("..")
-                }
-                
+                }   
                 )
     
     
@@ -244,6 +245,22 @@ peptide.features <- reactiveValues()
         
     })
     
+    
+    MEMTable <- reactiveValues(data=DefMEMTable) 
+    
+    MEMTable2 <- reactive({
+        MEMTable
+    })
+    
+    #AllCentReact <- reactiveValues(data = DefaultAllCents)
+    
+    AllCentReact <- reactive({
+        
+        lapply(peptide.features$data  ,function(x) mainCentNewMod2(x))
+        
+    })
+    
+    
     observeEvent(input$expCent,{
         temp <- MEMTable$data
         temp[curRow(),9] <- Centroid()
@@ -258,24 +275,16 @@ peptide.features <- reactiveValues()
         
         subNo <- switch(stateRepUp,"A1"=1,"A2"=2,"A3"=3,"B1"=4,"B2"=5,"B3"=6)
         
-        v <- AllCentReact$data
-        v <- v[[PepNumber]][[subNo]]
-        v[v$'time (min)'==input$varTime,2] <- Centroid()
-        AllCentReact$data[[PepNumber]][[subNo]] <- v
+        #v <- AllCentReact()
+        #v <- v[[PepNumber]][[subNo]]
+        #v[v$'time (min)'==input$varTime,2] <- Centroid()
+        #AllCentReact()[[PepNumber]][[subNo]] <- v
     } )
     
     
     
     
-    MEMTable <- reactiveValues(data = DefMEMTable)
-    
-    MEMTable2 <- reactive({
-        MEMTable
-    })
-    
-    #AllCentReact <- reactiveValues(data = DefaultAllCents)
-  
-    
+
       
     
     CurSpec <- reactive({
@@ -372,7 +381,7 @@ peptide.features <- reactiveValues()
     output$plotUptake <- renderPlot({
         
         
-       PlotUptakeCompare(CurPepUptake(),all.cents = AllCentReact$data[[CurPepUptake()]],times=TP)
+       PlotUptakeCompare(CurPepUptake(),all.cents = AllCentReact()[[CurPepUptake()]],times=TP)
         
     })
     
