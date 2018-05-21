@@ -156,6 +156,9 @@ ui <- fluidPage(theme=shinytheme("cerulean"),
                     tabPanel("Output table",
                              
                              dataTableOutput("MEMHDXTable")
+                             ),
+                    tabPanel("Test Table",
+                             dataTableOutput("Testtable")
                              )
                     
                     
@@ -173,6 +176,7 @@ server <- function(input, output) {
     
     
    peptide.features <- reactiveValues()
+   AllCentReact <- reactiveValues()
 
 
     
@@ -180,7 +184,8 @@ server <- function(input, output) {
                   
                   {
                      setwd("data/HDX220318")
-                     peptide.features$data <- importNew() 
+                     peptide.features$data <- importNew()
+                     AllCentReact$data <- lapply(peptide.features$data  ,function(x) mainCentNewMod2(x))
                      setwd("..")
                      setwd("..")
                      
@@ -254,11 +259,11 @@ server <- function(input, output) {
     
     #AllCentReact <- reactiveValues(data = DefaultAllCents)
     
-    AllCentReact <- reactive({
+    #AllCentReact <- reactive({
         
-        lapply(peptide.features$data  ,function(x) mainCentNewMod2(x))
+     #   lapply(peptide.features$data  ,function(x) mainCentNewMod2(x))
         
-    })
+    #})
     
     
     observeEvent(input$expCent,{
@@ -275,10 +280,11 @@ server <- function(input, output) {
         
         subNo <- switch(stateRepUp,"A1"=1,"A2"=2,"A3"=3,"B1"=4,"B2"=5,"B3"=6)
         
-        #v <- AllCentReact()
-        #v <- v[[PepNumber]][[subNo]]
-        #v[v$'time (min)'==input$varTime,2] <- Centroid()
-        #AllCentReact()[[PepNumber]][[subNo]] <- v
+        
+      tempCent <- AllCentReact$data[[PepNumber]][[subNo]]
+      tempCent[tempCent$'time (min)'==input$varTime,2] <- Centroid()
+       AllCentReact$data[[PepNumber]][[subNo]] <- tempCent
+    
     } )
     
     
@@ -381,8 +387,12 @@ server <- function(input, output) {
     output$plotUptake <- renderPlot({
         
         
-       PlotUptakeCompare(CurPepUptake(),all.cents = AllCentReact()[[CurPepUptake()]],times=TP)
+       PlotUptakeCompare(CurPepUptake(),all.cents = AllCentReact$data[[CurPepUptake()]],times=TP)
         
+    })
+    
+    output$Testtable <- renderDataTable({
+        datatable(AllCentReact$data[[1]][[4]])
     })
     
     output$video <- renderUI({
