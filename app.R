@@ -3,6 +3,7 @@ library(MALDIHDX)
 library(DT)
 library(shinyjs)
 
+
 options(shiny.maxRequestSize = 30*1024^2)
 
 
@@ -19,6 +20,8 @@ DefaultAllCents <- lapply(isolate(peptide.features$data)  ,function(x) mainCentN
 
 # Define UI
 ui <- fluidPage(theme=shinytheme("cerulean"),
+                
+                
     
     useShinyjs(),
     
@@ -181,13 +184,22 @@ server <- function(input, output) {
 
     
    observeEvent(input$FileImport,
-                  
+                 
+                 
                   {
+                      withProgress(message="Importing and analysing data...",value=0,{
+                      
+                      
                      setwd("data/HDX220318")
                      peptide.features$data <- importNew()
+                     incProgress(1/2,"Calculating centroids based on default parameters..")
                      AllCentReact$data <- lapply(peptide.features$data  ,function(x) mainCentNewMod2(x))
                      setwd("..")
                      setwd("..")
+                     
+                     incProgress(1/2,"Complete")
+                     
+                      })
                      
                   }
                   )
