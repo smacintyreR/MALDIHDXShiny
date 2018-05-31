@@ -28,7 +28,7 @@ ui <- fluidPage(theme=shinytheme("cerulean"),
     navbarPage("MALDIHDX",tabPanel("About"),
                
                
-              tabPanel("Tutorial",
+              tabPanel(icon=icon("clipboard"),"Tutorial",
                        
                        fluidRow(column(12,titlePanel("Tutorial"),align="center")),
                        
@@ -44,7 +44,7 @@ ui <- fluidPage(theme=shinytheme("cerulean"),
               
               
               
-              tabPanel("Analysis",
+              tabPanel(icon=icon("cogs"),"Analysis",
     
     # App title
     titlePanel("Centroid calculation and validation of HDX-MS Experiments"),
@@ -247,6 +247,8 @@ server <- function(input, output) {
     })
     
     
+
+     
     
     
     observeEvent(c(input$var,input$varRep,input$resSNR,input$varBound,input$varTime), {
