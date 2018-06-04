@@ -22,154 +22,154 @@ DefaultAllCents <- lapply(isolate(peptide.features$data)  ,function(x) mainCentN
 ui <- fluidPage(theme=shinytheme("cerulean"),
                 
                 
-    
-    useShinyjs(),
-    
-    navbarPage("MALDIHDX",tabPanel("About"),
-               
-               
-              tabPanel(icon=icon("clipboard"),"Tutorial",
-                       
-                       fluidRow(column(12,titlePanel("Tutorial"),align="center")),
-                       
-                       hr(),
-                       
-                       fluidRow(column(12,img(src = "dodecane.gif", height = 140, width = 400),align="center")),hr(),
-                       
-                       fluidRow(column=12,htmlOutput("video"),align="center")
-                       
-                       ),
-                       
-                       
-              
-              
-              
-              tabPanel(icon=icon("cogs"),"Analysis",
-    
-    # App title
-    titlePanel("Centroid calculation and validation of HDX-MS Experiments"),
-    
-    # Main panel for displaying outputs ----
-    mainPanel(
-        
-        # Output: Tabset
-        tabsetPanel(type = "tabs",
-                    
-                    tabPanel("Data Import",
-                             
-                             sidebarLayout(
-                                 
-                                 sidebarPanel(
-                                     
-                                     helpText("Please upload a Zip file containing
+                
+                useShinyjs(),
+                
+                navbarPage("MALDIHDX",tabPanel("About"),
+                           
+                           
+                           tabPanel(icon=icon("clipboard"),"Tutorial",
+                                    
+                                    fluidRow(column(12,titlePanel("Tutorial"),align="center")),
+                                    
+                                    hr(),
+                                    
+                                    fluidRow(column(12,img(src = "dodecane.gif", height = 140, width = 400),align="center")),hr(),
+                                    
+                                    fluidRow(column=12,htmlOutput("video"),align="center")
+                                    
+                           ),
+                           
+                           
+                           
+                           
+                           
+                           tabPanel(icon=icon("cogs"),"Analysis",
+                                    
+                                    # App title
+                                    titlePanel("Centroid calculation and validation of HDX-MS Experiments"),
+                                    
+                                    # Main panel for displaying outputs ----
+                                    mainPanel(
+                                        
+                                        # Output: Tabset
+                                        tabsetPanel(type = "tabs",
+                                                    
+                                                    tabPanel("Data Import",
+                                                             
+                                                             sidebarLayout(
+                                                                 
+                                                                 sidebarPanel(
+                                                                     
+                                                                     helpText("Please upload a Zip file containing
                                           Scaffold file and Mass Spectra"),
-                                     
-                                     
-                                     fileInput("FileInput", "Choose folder",
-                                               multiple = TRUE, buttonLabel = "Browse...",placeholder = "No file selected"
-                                     ),
-                                     
-                                     actionButton("FileImport","Import all Spectra")
-                                 ),
-                                 
-                                 mainPanel()
-                             )  
-                    ),  
-                    
-                    tabPanel("Identifications",
-                             
-                             dataTableOutput("table")),
-                    
-                    tabPanel("Centroid Plots",
-                             
-                             fluidRow(
-                                 
-                                 column(8,
-                                        
-                                        plotOutput("plot"),
-                                        hr(),
-                                        
-                                        fluidRow(column(6,
-                                                        
-                                                        selectInput("var", label = "Select peptide",
-                                                                    choices = peptide.identifications[,3],
-                                                                    selected = peptide.identifications[1,3]),
-                                                        
-                                                        selectInput("varRep", label = "Select Replicate",
-                                                                    choices = c("1","2","3"),
-                                                                    selected = "1")),
-                                                 
-                                                 column(6,
-                                                        
-                                                        selectInput("varTime", label = "Select timepoint",
-                                                                    choices = TP,
-                                                                    selected = TP[1]),
-                                                        
-                                                        selectInput("varBound", label = "Select State",
-                                                                    choices = c("Bound", "Unbound"),
-                                                                    selected = "Unbound"))
-                                                 
-                                                 
-                                        ) 
-                                 ),
-                                 
-                                 column(4,br(),
-                                        
-                                        h4("Centroid Parameters"), hr(),
-                                        
-                                        sliderInput('SNR','Signal to Noise',min=1,max=10,
-                                                    value = 5, step =0.1),
-                                        actionButton("resSNR","Reset to default"),br(),br(),
-                                        
-                                        sliderInput('BPI','% Base Peak Intensity',min=0.1,max=95,
-                                                    value = 50, step =1),
-                                        actionButton("resBPI","Reset to default"),br(),br(),hr(),br(),
-                                        
-                                        fluidRow(column(12,
-                                                        
-                                                        tableOutput("tableCent"),actionButton("expCent","Export centroid to output table"),span(textOutput("Done"), style="color:blue")  
-                                                        
-                                        ))
-                                 )
-                             )
-                    ),
-                    
-                    
-                    tabPanel("Uptake Plots",
-                             
-                             sidebarLayout(
-                                 
-                                 sidebarPanel(
-                                     
-                                     helpText("Select peptide to view Deuterium uptake plots"),
-                                     
-                                     selectInput("varPep", label = "Select peptide",
-                                                 choices = peptide.identifications[,3],
-                                                 selected = peptide.identifications[1,3])
-                                   
-                                     ),
-                                 
-                                 mainPanel(plotOutput("plotUptake"))
-                             ) 
-                             
-            
-                             ),
-                    
-                    
-                    tabPanel("Output table",
-                             
-                             dataTableOutput("MEMHDXTable")
-                             ),
-                    tabPanel("Test Table",
-                             dataTableOutput("Testtable")
-                             )
-                    
-                    
-                    
-        )
-    ) 
-    
-    ),tabPanel("Publications"),tabPanel(icon=icon("star"),"News"))
+                                                                     
+                                                                     
+                                                                     fileInput("FileInput", "Choose folder",
+                                                                               multiple = TRUE, buttonLabel = "Browse...",placeholder = "No file selected"
+                                                                     ),
+                                                                     
+                                                                     actionButton("FileImport","Import all Spectra")
+                                                                 ),
+                                                                 
+                                                                 mainPanel()
+                                                             )  
+                                                    ),  
+                                                    
+                                                    tabPanel("Identifications",
+                                                             
+                                                             dataTableOutput("table")),
+                                                    
+                                                    tabPanel("Centroid Plots",
+                                                             
+                                                             fluidRow(
+                                                                 
+                                                                 column(8,
+                                                                        
+                                                                        plotOutput("plot"),
+                                                                        hr(),
+                                                                        
+                                                                        fluidRow(column(6,
+                                                                                        
+                                                                                        selectInput("var", label = "Select peptide",
+                                                                                                    choices = peptide.identifications[,3],
+                                                                                                    selected = peptide.identifications[1,3]),
+                                                                                        
+                                                                                        selectInput("varRep", label = "Select Replicate",
+                                                                                                    choices = c("1","2","3"),
+                                                                                                    selected = "1")),
+                                                                                 
+                                                                                 column(6,
+                                                                                        
+                                                                                        selectInput("varTime", label = "Select timepoint",
+                                                                                                    choices = TP,
+                                                                                                    selected = TP[1]),
+                                                                                        
+                                                                                        selectInput("varBound", label = "Select State",
+                                                                                                    choices = c("Bound", "Unbound"),
+                                                                                                    selected = "Unbound"))
+                                                                                 
+                                                                                 
+                                                                        ) 
+                                                                 ),
+                                                                 
+                                                                 column(4,br(),
+                                                                        
+                                                                        h4("Centroid Parameters"), hr(),
+                                                                        
+                                                                        sliderInput('SNR','Signal to Noise',min=1,max=10,
+                                                                                    value = 5, step =0.1),
+                                                                        actionButton("resSNR","Reset to default"),br(),br(),
+                                                                        
+                                                                        sliderInput('BPI','% Base Peak Intensity',min=0.1,max=95,
+                                                                                    value = 50, step =1),
+                                                                        actionButton("resBPI","Reset to default"),br(),br(),hr(),br(),
+                                                                        
+                                                                        fluidRow(column(12,
+                                                                                        
+                                                                                        tableOutput("tableCent"),actionButton("expCent","Export centroid to output table"),span(textOutput("Done"), style="color:blue")  
+                                                                                        
+                                                                        ))
+                                                                 )
+                                                             )
+                                                    ),
+                                                    
+                                                    
+                                                    tabPanel("Uptake Plots",
+                                                             
+                                                             sidebarLayout(
+                                                                 
+                                                                 sidebarPanel(
+                                                                     
+                                                                     helpText("Select peptide to view Deuterium uptake plots"),
+                                                                     
+                                                                     selectInput("varPep", label = "Select peptide",
+                                                                                 choices = peptide.identifications[,3],
+                                                                                 selected = peptide.identifications[1,3])
+                                                                     
+                                                                 ),
+                                                                 
+                                                                 mainPanel(plotOutput("plotUptake"))
+                                                             ) 
+                                                             
+                                                             
+                                                    ),
+                                                    
+                                                    
+                                                    tabPanel("Output table",
+                                                             
+                                                             dataTableOutput("MEMHDXTable")
+                                                    ),
+                                                    tabPanel("Test Table",
+                                                             dataTableOutput("Testtable")
+                                                    )
+                                                    
+                                                    
+                                                    
+                                        )
+                                    ) 
+                                    
+                           ),tabPanel("Publications"),tabPanel(icon=icon("star"),"News"))
 )
 
 
@@ -178,31 +178,31 @@ ui <- fluidPage(theme=shinytheme("cerulean"),
 server <- function(input, output) {
     
     
-   peptide.features <- reactiveValues()
-   AllCentReact <- reactiveValues()
-
-
+    peptide.features <- reactiveValues()
+    AllCentReact <- reactiveValues()
     
-   observeEvent(input$FileImport,
+    
+    
+    observeEvent(input$FileImport,
                  
                  
-                  {
-                      withProgress(message="Importing and analysing data...",value=0,{
-                      
-                      
-                     setwd("data/HDX220318")
-                     peptide.features$data <- importNew()
-                     incProgress(1/2,"Calculating centroids based on default parameters..")
-                     AllCentReact$data <- lapply(peptide.features$data  ,function(x) mainCentNewMod2(x))
-                     setwd("..")
-                     setwd("..")
+                 {
+                     withProgress(message="Importing and analysing data...",value=0,{
+                         
+                         
+                         setwd("data/HDX220318")
+                         peptide.features$data <- importNew()
+                         incProgress(1/2,"Calculating centroids based on default parameters..")
+                         AllCentReact$data <- lapply(peptide.features$data  ,function(x) mainCentNewMod2(x))
+                         setwd("..")
+                         setwd("..")
+                         
+                         incProgress(1/2,"Complete")
+                         
+                     })
                      
-                     incProgress(1/2,"Complete")
-                     
-                      })
-                     
-                  }
-                  )
+                 }
+    )
     
     L <- reactive({
         
@@ -215,20 +215,20 @@ server <- function(input, output) {
     #DefMEMTable <- MEMHDXall2(DefaultAllCents)
     
     
-   observeEvent(input$FileInput,
-                {
-                    
-                    
-                    setwd("data")
-                    file.remove(list.files())
-                    unlink(list.files(),recursive=T)
-                    infile <- input$FileInput
-                    if(is.null(infile))
-                        return(NULL)
-                    unzip(infile$datapath)
-                    setwd("..")
-                }   
-                )
+    observeEvent(input$FileInput,
+                 {
+                     
+                     
+                     setwd("data")
+                     file.remove(list.files())
+                     unlink(list.files(),recursive=T)
+                     infile <- input$FileInput
+                     if(is.null(infile))
+                         return(NULL)
+                     unzip(infile$datapath)
+                     setwd("..")
+                 }   
+    )
     
     
     
@@ -247,8 +247,8 @@ server <- function(input, output) {
     })
     
     
-
-     
+    
+    
     
     
     observeEvent(c(input$var,input$varRep,input$resSNR,input$varBound,input$varTime), {
@@ -274,9 +274,9 @@ server <- function(input, output) {
     #AllCentReact <- reactiveValues(data = DefaultAllCents)
     
     #AllCentReact <- reactive({
-        
-     #   lapply(peptide.features$data  ,function(x) mainCentNewMod2(x))
-        
+    
+    #   lapply(peptide.features$data  ,function(x) mainCentNewMod2(x))
+    
     #})
     
     
@@ -295,17 +295,17 @@ server <- function(input, output) {
         subNo <- switch(stateRepUp,"A1"=1,"A2"=2,"A3"=3,"B1"=4,"B2"=5,"B3"=6)
         
         
-      tempCent <- AllCentReact$data[[PepNumber]][[subNo]]
-      tempCent[tempCent$'time (min)'==input$varTime,2] <- Centroid()
-       AllCentReact$data[[PepNumber]][[subNo]] <- tempCent
-    
+        tempCent <- AllCentReact$data[[PepNumber]][[subNo]]
+        tempCent[tempCent$'time (min)'==input$varTime,2] <- Centroid()
+        AllCentReact$data[[PepNumber]][[subNo]] <- tempCent
+        
     } )
     
     
     
     
-
-      
+    
+    
     
     CurSpec <- reactive({
         
@@ -328,7 +328,7 @@ server <- function(input, output) {
     
     CurPepUptake <- reactive({
         
-       match(input$varPep,peptide.identifications[,3])
+        match(input$varPep,peptide.identifications[,3])
         
     })
     
@@ -401,7 +401,7 @@ server <- function(input, output) {
     output$plotUptake <- renderPlot({
         
         
-       PlotUptakeCompare(CurPepUptake(),all.cents = AllCentReact$data[[CurPepUptake()]],times=TP)
+        PlotUptakeCompare(CurPepUptake(),all.cents = AllCentReact$data[[CurPepUptake()]],times=TP)
         
     })
     
