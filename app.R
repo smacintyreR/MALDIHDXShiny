@@ -26,7 +26,11 @@ ui <- fluidPage(theme=shinytheme("cerulean"),
                 
                 useShinyjs(),
                 
-                navbarPage("MALDIHDX",tabPanel("About"),
+                navbarPage(
+                
+                            strong("MALDIHDX"),
+                           
+                          tabPanel(icon=icon("home"),"About"),
                            
                            
                            tabPanel(icon=icon("clipboard"),"Tutorial",
@@ -170,7 +174,7 @@ ui <- fluidPage(theme=shinytheme("cerulean"),
                                         )
                                     ) 
                                     
-                           ),tabPanel("Publications"),tabPanel(icon=icon("star"),"News"))
+                           ),tabPanel(icon=icon("book"),"Publications"),tabPanel(icon=icon("star"),"News"))
 )
 
 
