@@ -2,6 +2,7 @@ library(shiny)
 library(MALDIHDX)
 library(DT)
 library(shinyjs)
+library(ggplot2)
 
 
 options(shiny.maxRequestSize = 30*1024^2)
