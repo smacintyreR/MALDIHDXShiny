@@ -77,9 +77,22 @@ ui <- fluidPage(theme=shinytheme("cerulean"),
                                                                      actionButton("FileImport","Import all Spectra")
                                                                  ),
                                                                  
-                                                                 mainPanel()
-                                                             )  
-                                                    ),  
+                                                                 mainPanel(
+                                                                     
+                                                                     helpText("Please upload a csv file containing identifications data"),
+                                                                     
+                                                                     
+                                                                     fileInput("FileInput", "Choose file",
+                                                                               multiple = FALSE, buttonLabel = "Browse...",placeholder = "No file selected"
+                                                                     ),
+                                                                     
+                                                                     actionButton("FileImport","Import identifications")
+                                                                 )
+                                                                     
+                                                                 )
+                                                             )
+                                                               
+                                                    ,  
                                                     
                                                     tabPanel("Identifications",
                                                              
