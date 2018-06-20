@@ -7,16 +7,16 @@ library(ggplot2)
 
 options(shiny.maxRequestSize = 30*1024^2)
 
+peptide.identifications <<- import.identifications()
 
 
-peptide.identifications <- import.identifications()
 
-TP <- unique(pep10[,2])
+#TP <- unique(pep10[,2])
 
 defSNR = 5
 
 #L <- lapply(peptide.features,function(x) DFtoSpec(x))
-DefaultAllCents <- lapply(isolate(peptide.features$data)  ,function(x) mainCentNewMod2(x))
+#DefaultAllCents <- lapply(isolate(peptide.features$data)  ,function(x) mainCentNewMod2(x))
 #DefMEMTable <- MEMHDXall2(DefaultAllCents)
 
 # Define UI
@@ -58,7 +58,7 @@ ui <- fluidPage(theme=shinytheme("cerulean"),
                                     mainPanel(
                                         
                                         # Output: Tabset
-                                        tabsetPanel(type = "tabs",
+                                        tabsetPanel(type = "tabs",id="analysis",
                                                     
                                                     tabPanel("Data Import",
                                                              
@@ -107,8 +107,7 @@ ui <- fluidPage(theme=shinytheme("cerulean"),
                                                                                  column(6,
                                                                                         
                                                                                         selectInput("varTime", label = "Select timepoint",
-                                                                                                    choices = TP,
-                                                                                                    selected = TP[1]),
+                                                                                                    ""),
                                                                                         
                                                                                         selectInput("varBound", label = "Select State",
                                                                                                     choices = c("Bound", "Unbound"),
@@ -180,11 +179,16 @@ ui <- fluidPage(theme=shinytheme("cerulean"),
 
 
 # Define server logic
-server <- function(input, output) {
+server <- function(input, output,session) {
+    
+    
+    
+    hideTab(inputId = "analysis",target="Uptake Plots")
     
     
     peptide.features <- reactiveValues()
     AllCentReact <- reactiveValues()
+    MEMTable <- reactiveValues() 
     
     
     
@@ -192,22 +196,33 @@ server <- function(input, output) {
                  
                  
                  {
+                     
+                    
                      withProgress(message="Importing and analysing data...",value=0,{
                          
-                         
+                         FinishIndicator <- 0
                          setwd("data/HDX220318")
                          peptide.features$data <- importNew()
                          incProgress(1/2,"Calculating centroids based on default parameters..")
                          AllCentReact$data <- lapply(peptide.features$data  ,function(x) mainCentNewMod2(x))
+                         MEMTable$data <- MEMHDXall2(AllCentReact$data)
+                         
                          setwd("..")
                          setwd("..")
                          
                          incProgress(1/2,"Complete")
-                         
+                         FinishIndicator <- 1
                      })
                      
                  }
     )
+    
+    observeEvent(is.null(AllCentReact$data)==F,
+                 
+                 {showTab(inputId = "analysis",target="Uptake Plots")})
+                 
+    
+    
     
     L <- reactive({
         
@@ -242,7 +257,7 @@ server <- function(input, output) {
     curRow <- reactive({
         
         state <- switch(input$varBound,"Unbound" = "UNBOUND","Bound" = "BOUND")
-        index <- which(c(DefMEMTable$Exposure == input$varTime & DefMEMTable$Replicate==input$varRep&DefMEMTable$State == state & DefMEMTable$Sequence==input$var))
+        index <- which(c(MEMTable$data$Exposure == input$varTime & MEMTable$data$Replicate==input$varRep&MEMTable$data$State == state & MEMTable$data$Sequence==input$var))
         return(index)
     })
     
@@ -270,11 +285,11 @@ server <- function(input, output) {
     })
     
     
-    MEMTable <- reactiveValues(data=DefMEMTable) 
+    #MEMTable <- reactiveValues(data=DefMEMTable) 
     
-    MEMTable2 <- reactive({
-        MEMTable
-    })
+    #MEMTable2 <- reactive({
+     #   MEMTable
+    #})
     
     #AllCentReact <- reactiveValues(data = DefaultAllCents)
     
@@ -365,7 +380,13 @@ server <- function(input, output) {
     
     
     
-    
+    observe({
+        updateSelectInput(
+            session,
+            "varTime",
+            choices=AllCentReact$data[[1]][[1]][,1])
+        
+    })
     
     
     
