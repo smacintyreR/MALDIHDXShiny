@@ -7,7 +7,7 @@ library(ggplot2)
 
 options(shiny.maxRequestSize = 30*1024^2)
 
-peptide.identifications <<- import.identifications()
+
 
 
 
@@ -110,8 +110,7 @@ ui <- fluidPage(theme=shinytheme("cerulean"),
                                                                         fluidRow(column(6,
                                                                                         
                                                                                         selectInput("var", label = "Select peptide",
-                                                                                                    choices = peptide.identifications[,3],
-                                                                                                    selected = peptide.identifications[1,3]),
+                                                                                                   ""),
                                                                                         
                                                                                         selectInput("varRep", label = "Select Replicate",
                                                                                                     choices = c("1","2","3"),
@@ -161,8 +160,7 @@ ui <- fluidPage(theme=shinytheme("cerulean"),
                                                                      helpText("Select peptide to view Deuterium uptake plots"),
                                                                      
                                                                      selectInput("varPep", label = "Select peptide",
-                                                                                 choices = peptide.identifications[,3],
-                                                                                 selected = peptide.identifications[1,3])
+                                                                                "")
                                                                      
                                                                  ),
                                                                  
@@ -202,6 +200,7 @@ server <- function(input, output,session) {
     peptide.features <- reactiveValues()
     AllCentReact <- reactiveValues()
     MEMTable <- reactiveValues() 
+    peptide.identifications <- reactiveValues()
     
     
     
@@ -214,11 +213,13 @@ server <- function(input, output,session) {
                      withProgress(message="Importing and analysing data...",value=0,{
                          
                          FinishIndicator <- 0
-                         setwd("data/HDX220318")
-                         peptide.features$data <- importNew()
+                         setwd("data")
+                         peptide.identifications$data <- import.identifications()
+                         setwd("HDX220318")
+                         peptide.features$data <- importNew(ids=peptide.identifications$data)
                          incProgress(1/2,"Calculating centroids based on default parameters..")
                          AllCentReact$data <- lapply(peptide.features$data  ,function(x) mainCentNewMod2(x))
-                         MEMTable$data <- MEMHDXall2(AllCentReact$data)
+                         MEMTable$data <- MEMHDXall2(AllCentReact$data,Idents=peptide.identifications$data)
                          
                          setwd("..")
                          setwd("..")
@@ -321,7 +322,7 @@ server <- function(input, output,session) {
         output$Done <- renderText(text)
         
         
-        PepNumber <- match(input$var,peptide.identifications[,3])
+        PepNumber <- match(input$var,peptide.identifications$data[,4])
         stateUp <- switch(input$varBound,"Unbound" = "A","Bound" = "B")
         stateRepUp <- paste(stateUp,input$varRep,sep="")
         
@@ -342,7 +343,7 @@ server <- function(input, output,session) {
     
     CurSpec <- reactive({
         
-        PepNo <- match(input$var,peptide.identifications[,3])
+        PepNo <- match(input$var,peptide.identifications$data[,4])
         
         PepSpectra <- L()[[PepNo]]
         
@@ -361,7 +362,7 @@ server <- function(input, output,session) {
     
     CurPepUptake <- reactive({
         
-        match(input$varPep,peptide.identifications[,3])
+        match(input$varPep,peptide.identifications$data[,4])
         
     })
     
@@ -401,11 +402,27 @@ server <- function(input, output,session) {
         
     })
     
+    observe({
+        updateSelectInput(
+            session,
+            "var",
+            choices=peptide.identifications$data[,4])
+        
+    })
+    
+    observe({
+        updateSelectInput(
+            session,
+            "varPep",
+            choices=peptide.identifications$data[,4])
+        
+    })
+    
     
     
     
     output$table <- renderDataTable({
-        peptide.identifications},rownames=T)
+        peptide.identifications$data},rownames=T)
     
     output$tableCent <- renderTable({
         CentTable()
@@ -440,7 +457,7 @@ server <- function(input, output,session) {
     output$plotUptake <- renderPlot({
         
         
-        PlotUptakeCompare(CurPepUptake(),all.cents = AllCentReact$data[[CurPepUptake()]],times=TP)
+        PlotUptakeCompare(CurPepUptake(),all.cents = AllCentReact$data[[CurPepUptake()]],times=TP,pep.ids = peptide.identifications$data)
         
     })
     
