@@ -174,9 +174,6 @@ ui <- fluidPage(theme=shinytheme("cerulean"),
                                                     tabPanel("Output table",
                                                              
                                                              dataTableOutput("MEMHDXTable")
-                                                    ),
-                                                    tabPanel("Test Table",
-                                                             dataTableOutput("Testtable")
                                                     )
                                                     
                                                     
