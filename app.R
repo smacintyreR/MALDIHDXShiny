@@ -62,9 +62,9 @@ ui <- fluidPage(theme=shinytheme("cerulean"),
                                                     
                                                     tabPanel("Data Import",
                                                              
-                                                             sidebarLayout(
+                                                             
                                                                  
-                                                                 sidebarPanel(
+                                                                 mainPanel(
                                                                      
                                                                      helpText("Please upload a Zip file containing
                                           Scaffold file and Mass Spectra"),
@@ -75,21 +75,9 @@ ui <- fluidPage(theme=shinytheme("cerulean"),
                                                                      ),
                                                                      
                                                                      actionButton("FileImport","Import all Spectra")
-                                                                 ),
+                                                                 )
                                                                  
-                                                                 mainPanel(
-                                                                     
-                                                                     helpText("Please upload a csv file containing identifications data"),
-                                                                     
-                                                                     
-                                                                     fileInput("FileInput", "Choose file",
-                                                                               multiple = FALSE, buttonLabel = "Browse...",placeholder = "No file selected"
-                                                                     ),
-                                                                     
-                                                                     actionButton("FileImport","Import identifications")
-                                                                 )
-                                                                     
-                                                                 )
+                                                                 
                                                              )
                                                                
                                                     ,  
