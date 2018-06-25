@@ -186,6 +186,8 @@ server <- function(input, output,session) {
     AllCentReact <- reactiveValues()
     MEMTable <- reactiveValues() 
     peptide.identifications <- reactiveValues()
+    TP <- reactiveValues()
+   
     
     
     
@@ -200,12 +202,12 @@ server <- function(input, output,session) {
                          FinishIndicator <- 0
                          setwd("data")
                          peptide.identifications$data <- import.identifications()
-                         setwd("HDX220318")
+                         setwd(list.files())
                          peptide.features$data <- importNew(ids=peptide.identifications$data)
                          incProgress(1/2,"Calculating centroids based on default parameters..")
                          AllCentReact$data <- lapply(peptide.features$data  ,function(x) mainCentNewMod2(x))
                          MEMTable$data <- MEMHDXall2(AllCentReact$data,Idents=peptide.identifications$data)
-                         
+                         TP$data <- as.numeric(unique(peptide.features$data[[1]][,2]))
                          setwd("..")
                          setwd("..")
                          
@@ -375,15 +377,16 @@ server <- function(input, output,session) {
         data.frame(cbind(Centroid = Centroid(),Width = (Width()[2]-Width()[1])))
     })
     
-    
+  
     
     
     
     observe({
+       
         updateSelectInput(
             session,
             "varTime",
-            choices=AllCentReact$data[[1]][[1]][,1])
+            choices=TP$data)
         
     })
     
