@@ -7,17 +7,7 @@ library(ggplot2)
 
 options(shiny.maxRequestSize = 30*1024^2)
 
-
-
-
-
-#TP <- unique(pep10[,2])
-
 defSNR = 5
-
-#L <- lapply(peptide.features,function(x) DFtoSpec(x))
-#DefaultAllCents <- lapply(isolate(peptide.features$data)  ,function(x) mainCentNewMod2(x))
-#DefMEMTable <- MEMHDXall2(DefaultAllCents)
 
 # Define UI
 ui <- fluidPage(theme=shinytheme("cerulean"),
@@ -58,7 +48,7 @@ ui <- fluidPage(theme=shinytheme("cerulean"),
                                     mainPanel(
                                         
                                         # Output: Tabset
-                                        tabsetPanel(type = "tabs",id="analysis",
+                                        tabsetPanel(id="tabs",
                                                     
                                                     tabPanel("Data Import",
                                                              
@@ -82,9 +72,9 @@ ui <- fluidPage(theme=shinytheme("cerulean"),
                                                                
                                                     ,  
                                                     
-                                                    tabPanel("Identifications",
+                                                   tabPanel("Identifications", conditionalPanel(condition="output.FLAG$data == FALSE",
                                                              
-                                                             dataTableOutput("table")),
+                                                             dataTableOutput("table"))),
                                                     
                                                     tabPanel("Centroid Plots",
                                                              
@@ -114,7 +104,7 @@ ui <- fluidPage(theme=shinytheme("cerulean"),
                                                                                                     selected = "Unbound"))
                                                                                  
                                                                                  
-                                                                        ) 
+                                                                        )
                                                                  ),
                                                                  
                                                                  column(4,br(),
@@ -177,9 +167,32 @@ ui <- fluidPage(theme=shinytheme("cerulean"),
 # Define server logic
 server <- function(input, output,session) {
     
+    FLAG <- reactiveValues(data=FALSE)
+    
+    hideTab(inputId = "tabs", target = "Centroid Plots")
+    hideTab(inputId = "tabs", target = "Uptake Plots")
+    hideTab(inputId = "tabs", target = "Identifications")
+    hideTab(inputId = "tabs", target = "Output table")
+    
+   observe({
+       
+       if(FLAG$data==TRUE){
+           showTab(inputId = "tabs", target = "Centroid Plots")
+           showTab(inputId = "tabs", target = "Uptake Plots")
+           showTab(inputId = "tabs", target = "Identifications")
+           showTab(inputId = "tabs", target = "Output table")
+       }
+       
+       else{
+           return()
+       }
+    }
+)
+   
+    
+
     
     
-    hideTab(inputId = "analysis",target="Uptake Plots")
     
     
     peptide.features <- reactiveValues()
@@ -187,7 +200,7 @@ server <- function(input, output,session) {
     MEMTable <- reactiveValues() 
     peptide.identifications <- reactiveValues()
     TP <- reactiveValues()
-   
+    
     
     
     
@@ -199,7 +212,7 @@ server <- function(input, output,session) {
                     
                      withProgress(message="Importing and analysing data...",value=0,{
                          
-                         FinishIndicator <- 0
+                         
                          setwd("data")
                          peptide.identifications$data <- import.identifications()
                          setwd(list.files())
@@ -212,7 +225,7 @@ server <- function(input, output,session) {
                          setwd("..")
                          
                          incProgress(1/2,"Complete")
-                         FinishIndicator <- 1
+                         FLAG$data <- TRUE
                      })
                      
                  }
