@@ -25,8 +25,13 @@ ui <- fluidPage(theme=shinytheme("cerulean"),
                              div(em("contact us at:", a("sam.macintyre@csiro.au")),align="center"),
                              br(),
                              p("This tool allows users to perfom an automated workflow to analyze, validate and visualize large HDX-MS datasets. The input file is the output of",strong("DynamX software"), "from Waters and of HDX Workbench http://hdx.florida.scripps.edu/hdx_workbench/Home.html . Output files provide a plot of the data, the fitted model for each peptide, a plot of the calculated p -values, and a global visualization of the experiment. User could also obtain an overview of all peptides on the 3D structure.",align="center",style="font-family: verdana",style="font-size: 40%"),
-                             img(src="csiro-logo.jpg",height=60,width=60,style="display: block; margin-left: auto; margin-right: auto;")
+                             img(src="csiro-logo.jpg",height=60,width=60,style="display: block; margin-left: auto; margin-right: auto;"), br(),
                              
+                             fluidRow(column(5,strong(h4("A. Centroid Plot")),img(src="Capture.PNG",height=350,width=400),
+                                             
+                                             fluidRow(column(12,strong(h4("B. Uptake Plot")),img(src="Capture2.PNG",height=350,width=400)))
+                                             
+                                             ),column(7,strong(h4("C. MEMHDX compatible Output Table")),img(src="Capture3.PNG")))
                              
                              ),
                     
