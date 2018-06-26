@@ -24,7 +24,8 @@ ui <- fluidPage(theme=shinytheme("cerulean"),
                              em(h5("developed by Sam MacIntyre and Thomas Nebl (CSIRO)",align="center")),
                              div(em("contact us at:", a("sam.macintyre@csiro.au")),align="center"),
                              br(),
-                             p("This tool allows users to perfom an automated workflow to analyze, validate and visualize large HDX-MS datasets. The input file is the output of",strong("DynamX software"), "from Waters and of HDX Workbench http://hdx.florida.scripps.edu/hdx_workbench/Home.html . Output files provide a plot of the data, the fitted model for each peptide, a plot of the calculated p -values, and a global visualization of the experiment. User could also obtain an overview of all peptides on the 3D structure.",align="center",style="font-family: verdana",style="font-size: 40%")
+                             p("This tool allows users to perfom an automated workflow to analyze, validate and visualize large HDX-MS datasets. The input file is the output of",strong("DynamX software"), "from Waters and of HDX Workbench http://hdx.florida.scripps.edu/hdx_workbench/Home.html . Output files provide a plot of the data, the fitted model for each peptide, a plot of the calculated p -values, and a global visualization of the experiment. User could also obtain an overview of all peptides on the 3D structure.",align="center",style="font-family: verdana",style="font-size: 40%"),
+                             img(src="csiro-logo.jpg",height=60,width=60,style="display: block; margin-left: auto; margin-right: auto;")
                              
                              
                              ),
