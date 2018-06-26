@@ -18,7 +18,16 @@ ui <- fluidPage(theme=shinytheme("cerulean"),
                     
                     strong("MALDIHDX"),
                     
-                    tabPanel(icon=icon("home"),"About"),
+                    tabPanel(icon=icon("home"),"About",
+                             
+                             strong(h3("MALDIHDX: Semi-automated centroid analysis for HDX-MS data",align="center")),
+                             em(h5("developed by Sam MacIntyre and Thomas Nebl (CSIRO)",align="center")),
+                             div(em("contact us at:", a("sam.macintyre@csiro.au")),align="center"),
+                             br(),
+                             p("This tool allows users to perfom an automated workflow to analyze, validate and visualize large HDX-MS datasets. The input file is the output of",strong("DynamX software"), "from Waters and of HDX Workbench http://hdx.florida.scripps.edu/hdx_workbench/Home.html . Output files provide a plot of the data, the fitted model for each peptide, a plot of the calculated p -values, and a global visualization of the experiment. User could also obtain an overview of all peptides on the 3D structure.",align="center",style="font-family: verdana",style="font-size: 40%")
+                             
+                             
+                             ),
                     
                     
                     tabPanel(icon=icon("clipboard"),"Tutorial",
@@ -53,7 +62,7 @@ ui <- fluidPage(theme=shinytheme("cerulean"),
                                  # Output: Tabset
                                  tabsetPanel(id="tabs",
                                              
-                                             tabPanel("Data Import",
+                                             tabPanel("Data Import",br(),
                                                       
                                                       
                                                       
@@ -80,7 +89,7 @@ ui <- fluidPage(theme=shinytheme("cerulean"),
                                              ,  
                                              
                                              tabPanel("Identifications"
-                                                      , conditionalPanel(
+                                                      , br(),conditionalPanel(
                                                           condition=
                                                               "output.FLAG$data == 
                                                           FALSE",
@@ -88,7 +97,7 @@ ui <- fluidPage(theme=shinytheme("cerulean"),
                                                           dataTableOutput(
                                                               "table"))),
                                              
-                                             tabPanel("Centroid Plots",
+                                             tabPanel("Centroid Plots",br(),
                                                       
                                                       fluidRow(
                                                           
@@ -139,7 +148,7 @@ ui <- fluidPage(theme=shinytheme("cerulean"),
                                                                  )
                                                           ),
                                                           
-                                                          column(4,br(),
+                                                          column(4,
                                                                  
                                                                  h4(
                                                                      "Centroid Parameters"), hr(),
@@ -173,7 +182,7 @@ ui <- fluidPage(theme=shinytheme("cerulean"),
                                                           ),
                                              
                                              
-                                             tabPanel("Uptake Plots",
+                                             tabPanel("Uptake Plots",br(),
                                                       
                                                       sidebarLayout(
                                                           
@@ -198,7 +207,7 @@ ui <- fluidPage(theme=shinytheme("cerulean"),
                                              ),
                                              
                                              
-                                             tabPanel("Output table",
+                                             tabPanel("Output table",br(),
                                                       
                                                       dataTableOutput(
                                                           "MEMHDXTable")
@@ -270,8 +279,7 @@ server <- function(input, output,session) {
                      
                      withProgress(message="Importing and analysing data...",
                                   value=0,{
-                                     FLAG$data <- FALSE 
-                                      
+                                    
                                       setwd("data")
                                       peptide.identifications$data <- 
                                           import.identifications()
