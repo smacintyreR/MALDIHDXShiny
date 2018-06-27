@@ -31,14 +31,14 @@ ui <- fluidPage(theme=shinytheme("cerulean"),
                                              
                                              fluidRow(column(12,strong(h4("B. Uptake Plot")),img(src="Capture2.PNG",height=350,width=400)))
                                              
-                                             ),column(7,strong(h4("C. MEMHDX compatible Output Table")),img(src="Capture3.PNG")))
+                                             ),column(7,strong(h4("C. MEMHDX compatible Output Table")),img(src="Capture3.PNG",height=500,width=800)))
                              
                              ),
                     
                     
                     tabPanel(icon=icon("clipboard"),"Tutorial",
                              
-                             fluidRow(column(12,titlePanel("Tutorial"),
+                             fluidRow(column(12,h3("Tutorial"),
                                              align="center")),
                              
                              hr(),
@@ -59,7 +59,7 @@ ui <- fluidPage(theme=shinytheme("cerulean"),
                     tabPanel(icon=icon("cogs"),"Analysis",
                              
                              # App title
-                             titlePanel("Centroid calculation and 
+                             h3("Centroid calculation and 
                                         validation of HDX-MS Experiments"),
                              
                              # Main panel for displaying outputs ----
@@ -224,8 +224,8 @@ ui <- fluidPage(theme=shinytheme("cerulean"),
                                              )
                                  ) 
                              
-                             ),tabPanel(icon=icon("book"),"Publications"),
-                    tabPanel(icon=icon("star"),"News"))
+                             ),tabPanel(icon=icon("book"),"Publications",h3("MALDIHDX publications",align="center")),
+                    tabPanel(icon=icon("star"),"News",h3("Latest news in MALDIHDX",align="center")))
                 )
 
 
