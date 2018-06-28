@@ -38,13 +38,13 @@ ui <- fluidPage(theme=shinytheme("cerulean"),
                     
                     tabPanel(icon=icon("clipboard"),"Tutorial",
                              
-                             fluidRow(column(12,h3("Tutorial"),
+                             fluidRow(column(12,h3("How to use MALDIHDX"),
                                              align="center")),
                              
                              hr(),
                              
                              fluidRow(column(12,img(src = 
-                                                        "dodecane.gif", height = 140, width = 400)
+                                                        "TutorialGraphicDraft.png",height=260,width=750)
                                              ,align="center")),hr(),
                              
                              fluidRow(column=12,htmlOutput("video"),
