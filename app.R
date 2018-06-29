@@ -287,9 +287,10 @@ server <- function(input, output,session) {
                                   value=0,{
                                     
                                       setwd("data")
+                                      setwd(list.files())
                                       peptide.identifications$data <- 
                                           import.identifications()
-                                      setwd(list.files())
+                                      
                                       
                                       peptide.features$data <- importNew(ids=
                                                                              peptide.identifications$data)
