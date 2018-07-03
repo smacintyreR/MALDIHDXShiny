@@ -1,8 +1,10 @@
 library(shiny)
+
 library(MALDIHDX)
 library(DT)
 library(shinyjs)
 library(ggplot2)
+library(shinythemes)
 
 
 options(shiny.maxRequestSize = 30*1024^2)
@@ -95,13 +97,11 @@ ui <- fluidPage(theme=shinytheme("cerulean"),
                                              ,  
                                              
                                              tabPanel("Identifications"
-                                                      , br(),conditionalPanel(
-                                                          condition=
-                                                              "output.FLAG$data == 
-                                                          FALSE",
-                                                          
-                                                          dataTableOutput(
-                                                              "table"))),
+                                                      ,
+                                                       
+        
+                                                          DT::dataTableOutput(
+                                                              "table")),
                                              
                                              tabPanel("Centroid Plots",br(),
                                                       
@@ -215,7 +215,7 @@ ui <- fluidPage(theme=shinytheme("cerulean"),
                                              
                                              tabPanel("Output table",br(),
                                                       
-                                                      dataTableOutput(
+                                                      DT::dataTableOutput(
                                                           "MEMHDXTable")
                                              )
                                              
@@ -499,7 +499,7 @@ server <- function(input, output,session) {
     
     
     # Output: Peptide identifications table
-    output$table <- renderDataTable({
+    output$table <- DT::renderDataTable({
         peptide.identifications$data},rownames=T)
     
     
@@ -511,7 +511,7 @@ server <- function(input, output,session) {
     
     
     # Output: MEMHDX formatted table
-    output$MEMHDXTable <- renderDataTable(server=FALSE,{
+    output$MEMHDXTable <- DT::renderDataTable(server=FALSE,{
         datatable(MEMTable$data, extensions = 'Buttons'
                   , options = list( 
                       dom = "Blfrtip"
