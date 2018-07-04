@@ -328,14 +328,13 @@ server <- function(input, output,session) {
                  {
                      
                      
-                     setwd("data")
-                     file.remove(list.files())
-                     unlink(list.files(),recursive=T)
+                     file.remove(paste("data/",list.files("data"),sep=""))
+                     unlink(paste("data/",list.files("data"),sep=""),recursive = T)
                      infile <- input$FileInput
                      if(is.null(infile))
                          return(NULL)
-                     unzip(infile$datapath)
-                     setwd("..")
+                     unzip(infile$datapath,exdir = "data")
+                     
                  }   
     )
     
