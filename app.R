@@ -1,10 +1,13 @@
 library(shiny)
-
+library(stringr)
 library(MALDIHDX)
 library(DT)
 library(shinyjs)
 library(ggplot2)
 library(shinythemes)
+library(MALDIquantForeign)
+library(MALDIquantForeign)
+library(reshape2)
 
 
 options(shiny.maxRequestSize = 30*1024^2)
@@ -26,7 +29,7 @@ ui <- fluidPage(theme=shinytheme("cerulean"),
                              em(h5("developed by Sam MacIntyre and Thomas Nebl (CSIRO)",align="center")),
                              div(em("contact us at:", a("sam.macintyre@csiro.au")),align="center"),
                              br(),
-                             p("This tool allows users to perfom an automated workflow to analyze, validate and visualize large HDX-MS datasets. The input file is the output of",strong("DynamX software"), "from Waters and of HDX Workbench http://hdx.florida.scripps.edu/hdx_workbench/Home.html . Output files provide a plot of the data, the fitted model for each peptide, a plot of the calculated p -values, and a global visualization of the experiment. User could also obtain an overview of all peptides on the 3D structure.",align="center",style="font-family: verdana",style="font-size: 40%"),
+                             p("This tool allows users to perfom a semi-automated workflow to analyze, validate and visualize large HDX-MS datasets. The input file is the ",strong("Raw MS Data")," Output files provide a plot of the data, the fitted model for each peptide, a plot of the calculated p -values, and a global visualization of the experiment. User could also obtain an overview of all peptides on the 3D structure.",align="center",style="font-family: verdana",style="font-size: 40%"),
                              img(src="csiro-logo.jpg",height=60,width=60,style="display: block; margin-left: auto; margin-right: auto;"), br(),
                              
                              fluidRow(column(5,strong(h4("A. Centroid Plot")),img(src="Capture.PNG",height=350,width=400),
@@ -126,9 +129,7 @@ ui <- fluidPage(theme=shinytheme("cerulean"),
                                                                                  
                                                                                  selectInput("varRep", label = "Select Replicate",
                                                                                              
-                                                                                             choices = c("1","2","3"),
-                                                                                             
-                                                                                             selected = "1")),
+                                                                                             "")),
                                                                           
                                                                           
                                                                           
@@ -286,14 +287,13 @@ server <- function(input, output,session) {
                      withProgress(message="Importing and analysing data...",
                                   value=0,{
                                     
-                                      setwd("data")
-                                      setwd(list.files())
+                                      
                                       peptide.identifications$data <- 
-                                          import.identifications()
+                                          import.identifications(path=paste("data/",list.files("data"),sep=""))
                                       
                                       
                                       peptide.features$data <- importNew(ids=
-                                                                             peptide.identifications$data)
+                                                                             peptide.identifications$data,path=paste("data/",list.files("data"),sep=""))
                                       
                                       incProgress(1/2,"Calculating centroids based on 
                                                   default parameters..")
@@ -305,8 +305,7 @@ server <- function(input, output,session) {
                                       
                                       TP$data <- as.numeric(unique(peptide.features$data[[1
                                                                                           ]][,2]))
-                                      setwd("..")
-                                      setwd("..")
+                                   
                                       
                                       incProgress(1/2,"Complete")
                                       FLAG$data <- TRUE
@@ -492,6 +491,14 @@ server <- function(input, output,session) {
             session,
             "varPep",
             choices=peptide.identifications$data[,4])
+        
+    })
+    
+    observe({
+        updateSelectInput(
+            session,
+            "varRep",
+            choices=unique(MEMTable$data[,8]))
         
     })
     
