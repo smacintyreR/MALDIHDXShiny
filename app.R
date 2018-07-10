@@ -309,7 +309,7 @@ server <- function(input, output,session) {
                                       incProgress(1/2,"Calculating centroids based on 
                                                   default parameters..")
                                       AllCentReact$data <- lapply(peptide.features$data  ,
-                                                                  function(x) mainCentNewMod2(x))
+                                                                  function(x) mainCentNewMod2(x) )
                                       
                                       MEMTable$data <- MEMHDXall2(AllCentReact$data,Idents=
                                                                       peptide.identifications$data)
