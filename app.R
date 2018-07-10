@@ -29,7 +29,12 @@ ui <- fluidPage(theme=shinytheme("cerulean"),
                              em(h5("developed by Sam MacIntyre and Thomas Nebl (CSIRO)",align="center")),
                              div(em("contact us at:", a("sam.macintyre@csiro.au")),align="center"),
                              br(),
-                             p("This tool allows users to perfom a semi-automated workflow to analyze, validate and visualize large HDX-MS datasets. The input file is the ",strong("Raw MS Data")," Output files provide a plot of the data, the fitted model for each peptide, a plot of the calculated p -values, and a global visualization of the experiment. User could also obtain an overview of all peptides on the 3D structure.",align="center",style="font-family: verdana",style="font-size: 40%"),
+                             
+                             p("This tool allows users to perform a semi-automated workflow to analyse, validate and visualize large HDX-MS datasets.
+                               The input file is a zipped folder containing the ",strong("Raw MS Data"),"and an",strong("Identifications File"),
+                               "(which has specified required data fields) Output includes centroid plots for each sample (with manual editing based on available parameters),
+                               comparative deuterium uptake plots for each peptide and a downloadable MEMHDX compatible table.",align="center",style="font-family: verdana",style="font-size: 40%"),
+                             
                              img(src="csiro-logo.jpg",height=60,width=60,style="display: block; margin-left: auto; margin-right: auto;"), br(),
                              
                              fluidRow(column(5,strong(h4("A. Centroid Plot")),img(src="Capture.PNG",height=350,width=400),
@@ -91,7 +96,9 @@ ui <- fluidPage(theme=shinytheme("cerulean"),
                                                           ),
                                                           
                                                           
-                                                          actionButton("FileImport","Import all Spectra")
+                                                          actionButton("FileImport","Import all Spectra"),
+                                                          
+                                                          downloadLink("TESTDATA",label="  Download test data set here")
                                                           )
                                                       
                                                       
@@ -226,7 +233,11 @@ ui <- fluidPage(theme=shinytheme("cerulean"),
                                  ) 
                              
                              ),tabPanel(icon=icon("book"),"Publications",h3("MALDIHDX publications",align="center")),
-                    tabPanel(icon=icon("star"),"News",h3("Latest news in MALDIHDX",align="center")))
+                    tabPanel(icon=icon("star"),"News",h3("Latest news in MALDIHDX",align="center")
+                             
+                             
+                             
+                             ))
                 )
 
 
@@ -305,6 +316,8 @@ server <- function(input, output,session) {
                                       
                                       TP$data <- as.numeric(unique(peptide.features$data[[1
                                                                                           ]][,2]))
+                                      
+                                      
                                    
                                       
                                       incProgress(1/2,"Complete")
@@ -560,6 +573,21 @@ server <- function(input, output,session) {
                         "https://www.youtube.com/embed/DOClPhUJWcY",frameborder="0", allow=
                         "autoplay; encrypted-media")
     })
+    
+    
+    output$TESTDATA <- downloadHandler(
+        
+        filename=function(){
+            paste("MALDIHDXtest-data","zip",sep=".")
+        },
+        
+        content = function(file){
+            file.copy("TESTDATA/test-data5.zip",file)
+        },
+        contentType = "application/zip"
+        
+        
+    )                                                                                                      
     
 }
 
