@@ -82,11 +82,8 @@ ui <- fluidPage(theme=shinytheme("cerulean"),
                                                       
                                                       
                                                       
-                                                      mainPanel(
-                                                          
-                                                          helpText(
-                                                              "Please upload a Zip file containing
-                                                              Scaffold file and Mass Spectra"),
+                                                      
+                                                      sidebarPanel(
                                                           
                                                           
                                                           fileInput
@@ -99,10 +96,30 @@ ui <- fluidPage(theme=shinytheme("cerulean"),
                                                           actionButton("FileImport","Import all Spectra"),
                                                           
                                                           downloadLink("TESTDATA",label="  Download test data set here")
-                                                          )
+                                                      ),
                                                       
                                                       
-                                             )
+                                                      
+                                                      mainPanel(
+                                                          
+                                                          helpText(p(strong("
+                                                              MALDIHDX")," requires a",strong("zip file")," containing raw mass spectrometry data with the following format:",br(),br(),
+                                                                  em("STATE_TIMEPOINT_REPLICATE e.g. A_300_1, A_300_2, B_3600_3"),br(),br(),
+                                                              "Note that STATE can only have value A or B currently where A = Untreated/Unbound and B = Treated/Bound",br(),br(),
+                                                              "TIMEPOINT should be in minutes to conform to the MEMHDX input",br(),br(),
+                                                              "Secondly, a .csv (comma separated values) file is required with the following fields:"),br(),
+
+                                                                  strong("Sequence:")," Peptide sequence",br(),br(),
+                                                              strong("Observed:")," Observed monoisotopic mass of peptide",br(),br(),
+                                                              strong("Charge:")," Peptide charge (MALDIHDX currently only handles singly charged peptides)",br(),br(),
+                                                              strong("Start:")," Peptide Start position on the protein",br(),br(),
+                                                              strong("Stop:")," Peptide End position on the protein
+                                                              "))
+                                                      
+                                                  )
+                                                      
+                                                      
+                                             
                                              
                                              ,  
                                              
@@ -309,7 +326,7 @@ server <- function(input, output,session) {
                                       incProgress(1/2,"Calculating centroids based on 
                                                   default parameters..")
                                       AllCentReact$data <- lapply(peptide.features$data  ,
-                                                                  function(x) mainCentNewMod2(x) )
+                                                                  function(x) mainCentNewMod2(x))
                                       
                                       MEMTable$data <- MEMHDXall2(AllCentReact$data,Idents=
                                                                       peptide.identifications$data)
