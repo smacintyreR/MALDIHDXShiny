@@ -104,10 +104,10 @@ ui <- fluidPage(theme=shinytheme("cerulean"),
                                                           
                                                           helpText(p(strong("
                                                               MALDIHDX")," requires a",strong("zip file")," containing raw mass spectrometry data with the following format:",br(),br(),
-                                                                  em("STATE_TIMEPOINT_REPLICATE e.g. A_300_1, A_300_2, B_3600_3"),br(),br(),
-                                                              "Note that STATE can only have value A or B currently where A = Untreated/Unbound and B = Treated/Bound",br(),br(),
-                                                              "TIMEPOINT should be in minutes to conform to the MEMHDX input",br(),br(),
-                                                              "Secondly, a .csv (comma separated values) file is required with the following fields:"),br(),
+                                                                  div(em("STATE_TIMEPOINT_REPLICATE e.g. A_300_1, A_300_2, B_3600_3"),style="color:blue"),br(),br(),
+                                                              "Note that ",span("STATE",style="color:blue")," can only have value A or B currently where A = Untreated/Unbound and B = Treated/Bound",br(),br(),
+                                                              span("TIMEPOINT",style="color:blue")," should be in minutes to conform to the MEMHDX input",br(),br(),
+                                                              "Secondly, a",strong(" .csv (comma separated values)")," file is required with the following fields:"),br(),
 
                                                                   strong("Sequence:")," Peptide sequence",br(),br(),
                                                               strong("Observed:")," Observed monoisotopic mass of peptide",br(),br(),
@@ -586,9 +586,7 @@ server <- function(input, output,session) {
     
     # Tutorial video: embedded from Youtube
     output$video <- renderUI({
-        tags$iframe(width="560", height="315", src=
-                        "https://www.youtube.com/embed/DOClPhUJWcY",frameborder="0", allow=
-                        "autoplay; encrypted-media")
+        tags$iframe(width="560", height="315", src="https://www.youtube.com/embed/3g9-RZWAm9w", frameborder="0", allow="autoplay; encrypted-media")
     })
     
     
