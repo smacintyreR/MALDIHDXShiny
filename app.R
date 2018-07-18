@@ -33,7 +33,7 @@ ui <- fluidPage(theme=shinytheme("cerulean"),
                              p("This tool allows users to perform a semi-automated workflow to analyse, validate and visualize large HDX-MS datasets.
                                The input file is a zipped folder containing the ",strong("Raw MS Data"),"and an",strong("Identifications File"),
                                "(which has specified required data fields) Output includes centroid plots for each sample (with manual editing based on available parameters),
-                               comparative deuterium uptake plots for each peptide and a downloadable MEMHDX compatible table.",align="center",style="font-family: verdana",style="font-size: 40%"),
+                               comparative deuterium uptake plots for each peptide and a downloadable",tags$a(href="http://memhdx.c3bi.pasteur.fr/", "MEMHDX")," compatible table.",align="center",style="font-family: verdana",style="font-size: 40%"),
                              
                              img(src="csiro-logo.jpg",height=60,width=60,style="display: block; margin-left: auto; margin-right: auto;"), br(),
                              
