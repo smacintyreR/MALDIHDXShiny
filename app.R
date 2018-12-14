@@ -8,7 +8,6 @@ library(shinyjs)
 library(ggplot2)
 library(shinythemes)
 library(MALDIquantForeign)
-library(MALDIquantForeign)
 library(reshape2)
 
 
