@@ -1,5 +1,3 @@
-
-
 library(shiny)
 library(stringr)
 library(MALDIHDX)
@@ -10,8 +8,7 @@ library(shinythemes)
 library(MALDIquantForeign)
 library(reshape2)
 
-
-options(shiny.maxRequestSize = 30*1024^2)
+options(shiny.maxRequestSize = *1024^2)
 
 defSNR = 5
 
@@ -374,9 +371,6 @@ server <- function(input, output,session) {
                  }   
     )
     
-    
-    
-    
     # Reactive index to track the corresponding row of MEMHDX table 
     curRow <- reactive({
         
@@ -434,7 +428,6 @@ server <- function(input, output,session) {
                      AllCentReact$data[[PepNumber]][[subNo]] <- tempCent
                  } 
     )
-    
     
     # Selects the correct spectrum based on input parameters (Bound/Unbound,
     # Timepoint, Peptide etc.)
@@ -590,12 +583,10 @@ server <- function(input, output,session) {
         
     })
     
-    
     # Tutorial video: embedded from Youtube
     output$video <- renderUI({
         tags$iframe(width="560", height="315", src="https://www.youtube.com/embed/3g9-RZWAm9w", frameborder="0", allow="autoplay; encrypted-media")
     })
-    
     
     output$TESTDATA <- downloadHandler(
         
@@ -607,9 +598,7 @@ server <- function(input, output,session) {
             file.copy("TESTDATA/test-data5.zip",file)
         },
         contentType = "application/zip"
-        
-        
-    )                                                                                                      
+    )
     
 }
 
