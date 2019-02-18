@@ -1,3 +1,5 @@
+.libPaths( c( .libPaths(), "./R_libs") )
+
 library(shiny)
 library(stringr)
 library(MALDIHDX)
@@ -8,7 +10,7 @@ library(shinythemes)
 library(MALDIquantForeign)
 library(reshape2)
 
-options(shiny.maxRequestSize = *1024^2)
+options(shiny.maxRequestSize = 3000*1024^2)
 
 defSNR = 5
 
@@ -25,7 +27,8 @@ ui <- fluidPage(theme=shinytheme("cerulean"),
                              
                              strong(h3("MALDIHDX: Semi-automated centroid analysis for HDX-MS data",align="center")),
                              em(h5("developed by Sam MacIntyre and Thomas Nebl (CSIRO)",align="center")),
-                             div(em("contact us at:", a("sam.macintyre@csiro.au")),align="center"),
+                             div(em("contact us at:", a("sam.macintyre.sac@gmail.com"), "or", a("tom.nebl@csiro.au")),align="center"),
+                             p("This MALDIHDX app as a whole is distributed under GPL-3", align = "center"),
                              br(),
                              
                              p("This tool allows users to perform a semi-automated workflow to analyse, validate and visualize large HDX-MS datasets.
@@ -253,13 +256,14 @@ ui <- fluidPage(theme=shinytheme("cerulean"),
                                         p("MEMHDX paper from The Institut Pasteur: "),
                                         strong("MEMHDX: An interactive tool to expedite the statistical validation and visualization of large HDX-MS datasets"),
                                         em("Hourdel V, Volant S, O'Brien DP, Chenal A, Chamot-Rooke J, Dillies MA, Brier S, 2016 Jul 13"),tags$a(href="https://watermark.silverchair.com/btw420.pdf?token=AQECAHi208BE49Ooan9kkhW_Ercy7Dm3ZL_9Cf3qfKAc485ysgAAAcUwggHBBgkqhkiG9w0BBwagggGyMIIBrgIBADCCAacGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQM-xmiVS26AhuCBnpBAgEQgIIBeH7hjPdBfnz4wWufJ6NhyBYWf1cXxUS_OwyAXrwFnaW6TcZXBlcsUmwoKgQe8QQLkCiFse2HvU-wEZ_upPkpb1rwYG_RKkJt9XA-MWziaanlW7m2mINqgw8IafYuYTh_mIqhdkjPH8IHctg4CQnV90aUqtppjWLGoWbvBpFbWCphg7CMBlaq7uh-ZNPFGpe9v-IM5qK2HushIXnP5srzazPcwydeFZ-wvwDi-pz4yXELu-fjRTc4lIg-haOgyIHfu1hToX65p9gX8QuKuL3g70BxLulsYGcyc2DX_52KdZSLOBmKCTm3sCl_NtOwQhc0ivqMfHp9YrIa_rQYjqJfs9AEXo71G5AqToBBnFDGewqd07yDvMbpO5cpzEcgwBMBZ__LyEDZDEPqKi_-3eMpDbzmmeEruBnK87i_AbpglRUK3i-MWZGyzhQbVZz_uQjH9rwev7VxUDZTURkaVa_miKHle40zHQBzbYut-y9LwbIpCmJDt_1Uh-I", "Full Text"),
-                                        br(),br(),h4("Posters and Presentations"),"- IMSC, 2018:",br(),strong("Development and validation of semi-automatic MALDI-HDX sample preparation and data analysis tools"),br(),em("S. Macintyre, T. Nebl")),
-                    tabPanel(icon=icon("star"),"News",h3("Latest news in MALDIHDX",hr(),align="center")
+                                        br(),br(),h4("Posters and Presentations"),"- IMSC, 2018:",br(),strong("Development and validation of semi-automatic MALDI-HDX sample preparation and data analysis tools"),br(),em("S. Macintyre, T. Nebl"),
+                                        br(),br(),h4("GitHub Repository"), a("GitHub Repository", href="https://github.com/smacintyreR/MALDIHDXShiny")),
+                    tabPanel(icon=icon("star"),"News",h3("Latest news in MALDIHDX",hr(),align="center"))
                              
                              
                              
-                             ))
-                )
+                            ))
+                
 
 
 
@@ -321,11 +325,11 @@ server <- function(input, output,session) {
                                     
                                       
                                       peptide.identifications$data <- 
-                                          import.identifications(path=paste("data/",list.files("data"),sep=""))
+                                          import.identifications(path=list.files(path = "/tmp/MALDI/data/", full.names = TRUE))
                                       
                                       
                                       peptide.features$data <- importNew(ids=
-                                                                             peptide.identifications$data,path=paste("data/",list.files("data"),sep=""))
+                                                                             peptide.identifications$data,path=list.files(path = "/tmp/MALDI/data/", full.names = TRUE))
                                       
                                       incProgress(1/2,"Calculating centroids based on 
                                                   default parameters..")
@@ -361,12 +365,12 @@ server <- function(input, output,session) {
                  {
                      
                      
-                     file.remove(paste("data/",list.files("data"),sep=""))
-                     unlink(paste("data/",list.files("data"),sep=""),recursive = T)
+                     file.remove(paste("/tmp/MALDI/data",list.files("data"),sep=""))
+                     unlink(paste("/tmp/MALDI/data",list.files("data"),sep=""),recursive = T)
                      infile <- input$FileInput
                      if(is.null(infile))
                          return(NULL)
-                     unzip(infile$datapath,exdir = "data")
+                     unzip(infile$datapath,exdir = "/tmp/MALDI/data")
                      
                  }   
     )
