@@ -28,7 +28,7 @@ ui <- fluidPage(theme=shinytheme("cerulean"),
                              strong(h3("MALDIHDX: Semi-automated centroid analysis for HDX-MS data",align="center")),
                              em(h5("developed by Sam MacIntyre and Thomas Nebl (CSIRO)",align="center")),
                              div(em("contact us at:", a("sam.macintyre.sac@gmail.com"), "or", a("tom.nebl@csiro.au")),align="center"),
-                             p("This MALDIHDX app as a whole is distributed under GPL-3", align = "center"),
+                             p("This MALDIHDX app as a whole is distributed under a GPL-3 license", align = "center"),
                              br(),
                              
                              p("This tool allows users to perform a semi-automated workflow to analyse, validate and visualize large HDX-MS datasets.
